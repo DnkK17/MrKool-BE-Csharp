@@ -9,8 +9,6 @@ namespace MrKoolApplication.Help
     {
         public MappingProfiles() {
             CreateMap<Area, AreaDTO>();
-
-
             CreateMap<Station, StationDTO>();
         
 
