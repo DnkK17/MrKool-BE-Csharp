@@ -5,6 +5,7 @@ using MrKool.DTO;
 using MrKool.Interface;
 using MrKool.Models;
 using MrKool.Repository;
+using MrKoolApplication.DTO;
 using System.Collections.Generic;
 
 namespace MrKool.Controllers
@@ -23,14 +24,13 @@ namespace MrKool.Controllers
 
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Area>))]
-        public ActionResult GetAllAreas()
+        public async Task<ActionResult<IEnumerable<Area>>> GetActionResultAsync()
         {
-            var areas = _mapper.Map<List<AreaDTO>>( _areaRepository.GetAll());
-            if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                var areas = await _areaRepository.GetAllAsync();
+                var areaDTOs = _mapper.Map<IEnumerable<Area>>(areas);
+                return Ok(areaDTOs);
             }
-            return Ok(areas);
         }
 
         [HttpGet("{id}")]

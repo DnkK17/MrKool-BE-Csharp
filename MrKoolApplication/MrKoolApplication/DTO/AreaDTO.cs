@@ -1,4 +1,6 @@
-﻿namespace MrKool.DTO
+﻿using MrKool.Models;
+
+namespace MrKool.DTO
 {
     public class AreaDTO
     {
@@ -7,5 +9,6 @@
         public string Address { get; set; }
 
         public string City { get; set; }
+
     }
 }

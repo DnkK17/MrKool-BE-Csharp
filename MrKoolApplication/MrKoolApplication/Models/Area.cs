@@ -12,7 +12,7 @@ namespace MrKool.Models
 
         // Relationship
         public ICollection<Customer> CustomerList { get; set; }
-        public ICollection<Station> StationList { get; set; }
+        public List<Station> StationList { get; set; }
         public ICollection<Request> RequestList { get; set; }
     }
 }

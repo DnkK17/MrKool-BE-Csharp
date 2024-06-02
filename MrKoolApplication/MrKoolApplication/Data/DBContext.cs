@@ -58,6 +58,11 @@ namespace MrKool.Data
                 .HasOne(od => od.Technician)
                 .WithMany(t => t.FixHistoryList)
                 .HasForeignKey(od => od.TechnicianID);
+
+            modelBuilder.Entity<Area>()
+           .HasMany(a => a.StationList)
+           .WithOne(s => s.Area)
+           .HasForeignKey(s => s.StationID);
         }
     }
 }
