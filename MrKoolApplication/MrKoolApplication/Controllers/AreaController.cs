@@ -27,7 +27,7 @@ namespace MrKool.Controllers
         public async Task<ActionResult<IEnumerable<Area>>> GetActionResultAsync()
         {
             {
-                var areas = await _areaRepository.GetAllAsync();
+                var areas = await _areaRepository.GetAllAsync() ;
                 var areaDTOs = _mapper.Map<IEnumerable<Area>>(areas);
                 return Ok(areaDTOs);
             }

@@ -11,6 +11,8 @@
         // Relationships
         public ICollection<Technician> TechnicianList { get; set; }
         public ICollection<Request> RequestList { get; set; }
+
+        public ICollection<Station> StationList { get; set; }
         public Wallet Wallet { get; set; }
     }
 }

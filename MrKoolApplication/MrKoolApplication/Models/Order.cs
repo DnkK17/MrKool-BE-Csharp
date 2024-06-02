@@ -12,6 +12,7 @@
         // Relationships
         public ICollection<OrderDetail> OrderDetailList { get; set; }
 
+        public List<Request> RequestList { get; set; }
         public Customer Customer { get; set; }
 
         /*public Request Request { get; set; }*/

@@ -6,7 +6,7 @@ namespace MrKool.Models
     {
         public int AreaID { get; set; }
         public string Title { get; set; }
-        public string Address { get; set; }
+        public string AreaAddress { get; set; }
 
         public string City { get; set; }    
 

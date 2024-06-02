@@ -19,7 +19,7 @@ namespace MrKool.Repository
         {
             _context = context;
         }
-        public async Task<List<Area>> GetAllAsync(params Expression<Func<Area,object>>[] includes)
+        public async Task<List<Area>> GetAllAsync(params Expression<Func<Area, object>>[] includes)
         {
             IQueryable<Area> query = _context.Set<Area>();
             foreach (var include in includes)

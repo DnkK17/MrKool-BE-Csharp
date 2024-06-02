@@ -10,8 +10,9 @@ namespace MrKoolApplication.Help
         public MappingProfiles() {
             CreateMap<Area, AreaDTO>();
             CreateMap<Station, StationDTO>();
-        
-
+            CreateMap<Service, ServiceDTO>();
+            CreateMap<RequestDTO, Request>();
+            CreateMap<Request, RequestDTO>();
         }
     }
 }

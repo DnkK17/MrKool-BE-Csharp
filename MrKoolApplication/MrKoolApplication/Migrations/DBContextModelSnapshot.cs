@@ -30,7 +30,7 @@ namespace MrKoolApplication.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AreaID"));
 
-                    b.Property<string>("Address")
+                    b.Property<string>("AreaAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -78,16 +78,16 @@ namespace MrKoolApplication.Migrations
                     b.Property<int>("AreaID")
                         .HasColumnType("int");
 
+                    b.Property<string>("CustomerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Gender")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -245,20 +245,22 @@ namespace MrKoolApplication.Migrations
 
             modelBuilder.Entity("MrKool.Models.Request", b =>
                 {
-                    b.Property<int>("RequestID")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("OrderID")
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RequestID"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("AreaID")
                         .HasColumnType("int");
 
                     b.Property<int>("CustomerID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TechnicianID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StationID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ManagerID")
                         .HasColumnType("int");
 
                     b.Property<string>("Date")
@@ -269,31 +271,24 @@ namespace MrKoolApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ManagerID")
-                        .HasColumnType("int");
+                    b.Property<string>("RequestAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OrderID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StationID")
+                    b.Property<int>("RequestID")
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TechnicianID")
-                        .HasColumnType("int");
-
-                    b.HasKey("RequestID");
+                    b.HasKey("OrderID", "AreaID", "CustomerID", "TechnicianID", "StationID", "ManagerID");
 
                     b.HasIndex("AreaID");
 
                     b.HasIndex("CustomerID");
 
                     b.HasIndex("ManagerID");
-
-                    b.HasIndex("OrderID");
 
                     b.HasIndex("StationID");
 
@@ -324,13 +319,33 @@ namespace MrKoolApplication.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<string>("Title")
+                    b.Property<int>("RequestAreaID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RequestCustomerID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RequestManagerID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RequestOrderID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RequestStationID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RequestTechnicianID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ServiceTitle")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ServiceID");
 
                     b.HasIndex("ModelConditionerModelID");
+
+                    b.HasIndex("RequestOrderID", "RequestAreaID", "RequestCustomerID", "RequestTechnicianID", "RequestStationID", "RequestManagerID");
 
                     b.ToTable("Services");
                 });
@@ -350,12 +365,17 @@ namespace MrKoolApplication.Migrations
                     b.Property<int>("AreaID")
                         .HasColumnType("int");
 
+                    b.Property<int>("ManagerID")
+                        .HasColumnType("int");
+
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
                     b.HasKey("StationID");
 
                     b.HasIndex("AreaID");
+
+                    b.HasIndex("ManagerID");
 
                     b.ToTable("Stations");
                 });
@@ -383,6 +403,10 @@ namespace MrKoolApplication.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TechnicianName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -563,7 +587,7 @@ namespace MrKoolApplication.Migrations
                         .IsRequired();
 
                     b.HasOne("MrKool.Models.Order", "Order")
-                        .WithMany()
+                        .WithMany("RequestList")
                         .HasForeignKey("OrderID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -601,7 +625,15 @@ namespace MrKoolApplication.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("MrKool.Models.Request", "Request")
+                        .WithMany("Services")
+                        .HasForeignKey("RequestOrderID", "RequestAreaID", "RequestCustomerID", "RequestTechnicianID", "RequestStationID", "RequestManagerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Model");
+
+                    b.Navigation("Request");
                 });
 
             modelBuilder.Entity("MrKool.Models.Station", b =>
@@ -612,7 +644,15 @@ namespace MrKoolApplication.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("MrKool.Models.Manager", "Manager")
+                        .WithMany("StationList")
+                        .HasForeignKey("ManagerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Area");
+
+                    b.Navigation("Manager");
                 });
 
             modelBuilder.Entity("MrKool.Models.Technician", b =>
@@ -680,12 +720,21 @@ namespace MrKoolApplication.Migrations
                 {
                     b.Navigation("RequestList");
 
+                    b.Navigation("StationList");
+
                     b.Navigation("TechnicianList");
                 });
 
             modelBuilder.Entity("MrKool.Models.Order", b =>
                 {
                     b.Navigation("OrderDetailList");
+
+                    b.Navigation("RequestList");
+                });
+
+            modelBuilder.Entity("MrKool.Models.Request", b =>
+                {
+                    b.Navigation("Services");
                 });
 
             modelBuilder.Entity("MrKool.Models.Service", b =>

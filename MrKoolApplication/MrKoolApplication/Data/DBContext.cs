@@ -59,10 +59,38 @@ namespace MrKool.Data
                 .WithMany(t => t.FixHistoryList)
                 .HasForeignKey(od => od.TechnicianID);
 
-            modelBuilder.Entity<Area>()
-           .HasMany(a => a.StationList)
-           .WithOne(s => s.Area)
-           .HasForeignKey(s => s.StationID);
+            modelBuilder.Entity<Request>()
+                .HasKey(rq => new { rq.OrderID, rq.AreaID, rq.CustomerID, rq.TechnicianID, rq.StationID, rq.ManagerID });
+
+            modelBuilder.Entity<Request>()
+                .HasOne(rq => rq.Order)
+                .WithMany(r => r.RequestList)
+                .HasForeignKey(r => r.OrderID);
+
+            modelBuilder.Entity<Request>()
+                .HasOne(rq => rq.Area)
+                .WithMany(r => r.RequestList)
+                .HasForeignKey(r => r.AreaID);
+
+            modelBuilder.Entity<Request>()
+                .HasOne(rq => rq.Customer)
+                .WithMany(r => r.RequestList)
+                .HasForeignKey(r => r.CustomerID);
+
+            modelBuilder.Entity<Request>()
+                .HasOne(rq => rq.Technician)
+                .WithMany(r => r.RequestList)
+                .HasForeignKey(r => r.TechnicianID);
+
+            modelBuilder.Entity<Request>()
+                .HasOne(rq => rq.Station)
+                .WithMany(r => r.RequestList)
+                .HasForeignKey(r => r.StationID);
+
+            modelBuilder.Entity<Request>()
+                .HasOne(rq => rq.Manager)
+                .WithMany(r => r.RequestList)
+                .HasForeignKey(r => r.ManagerID);
         }
     }
 }

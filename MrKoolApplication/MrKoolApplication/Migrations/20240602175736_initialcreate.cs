@@ -18,7 +18,7 @@ namespace MrKoolApplication.Migrations
                     AreaID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AreaAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -63,7 +63,7 @@ namespace MrKoolApplication.Migrations
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Telephone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CustomerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Gender = table.Column<bool>(type: "bit", nullable: false),
                     AreaID = table.Column<int>(type: "int", nullable: false)
                 },
@@ -75,50 +75,6 @@ namespace MrKoolApplication.Migrations
                         column: x => x.AreaID,
                         principalTable: "Areas",
                         principalColumn: "AreaID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Stations",
-                columns: table => new
-                {
-                    StationID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: false),
-                    AreaID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Stations", x => x.StationID);
-                    table.ForeignKey(
-                        name: "FK_Stations_Areas_AreaID",
-                        column: x => x.AreaID,
-                        principalTable: "Areas",
-                        principalColumn: "AreaID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Services",
-                columns: table => new
-                {
-                    ServiceID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Date = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ModelConditionerModelID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Services", x => x.ServiceID);
-                    table.ForeignKey(
-                        name: "FK_Services_Models_ModelConditionerModelID",
-                        column: x => x.ModelConditionerModelID,
-                        principalTable: "Models",
-                        principalColumn: "ConditionerModelID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -167,40 +123,31 @@ namespace MrKoolApplication.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Technicians",
+                name: "Stations",
                 columns: table => new
                 {
-                    TechnicianID = table.Column<int>(type: "int", nullable: false)
+                    StationID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Telephone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ManagerID = table.Column<int>(type: "int", nullable: false),
-                    StationID = table.Column<int>(type: "int", nullable: false),
-                    WalletID = table.Column<long>(type: "bigint", nullable: false)
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false),
+                    AreaID = table.Column<int>(type: "int", nullable: false),
+                    ManagerID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Technicians", x => x.TechnicianID);
+                    table.PrimaryKey("PK_Stations", x => x.StationID);
                     table.ForeignKey(
-                        name: "FK_Technicians_Managers_ManagerID",
+                        name: "FK_Stations_Areas_AreaID",
+                        column: x => x.AreaID,
+                        principalTable: "Areas",
+                        principalColumn: "AreaID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Stations_Managers_ManagerID",
                         column: x => x.ManagerID,
                         principalTable: "Managers",
                         principalColumn: "ManagerID",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Technicians_Stations_StationID",
-                        column: x => x.StationID,
-                        principalTable: "Stations",
-                        principalColumn: "StationID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Technicians_Wallets_WalletID",
-                        column: x => x.WalletID,
-                        principalTable: "Wallets",
-                        principalColumn: "WalletID",
-                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -235,70 +182,40 @@ namespace MrKoolApplication.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FixHistories",
+                name: "Technicians",
                 columns: table => new
                 {
-                    TechnicianID = table.Column<int>(type: "int", nullable: false),
-                    CustomerID = table.Column<int>(type: "int", nullable: false),
-                    FixHistoryID = table.Column<int>(type: "int", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ServiceID = table.Column<int>(type: "int", nullable: false)
+                    TechnicianID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Telephone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TechnicianName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ManagerID = table.Column<int>(type: "int", nullable: false),
+                    StationID = table.Column<int>(type: "int", nullable: false),
+                    WalletID = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FixHistories", x => new { x.CustomerID, x.TechnicianID });
+                    table.PrimaryKey("PK_Technicians", x => x.TechnicianID);
                     table.ForeignKey(
-                        name: "FK_FixHistories_Customers_CustomerID",
-                        column: x => x.CustomerID,
-                        principalTable: "Customers",
-                        principalColumn: "CustomerID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_FixHistories_Services_ServiceID",
-                        column: x => x.ServiceID,
-                        principalTable: "Services",
-                        principalColumn: "ServiceID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_FixHistories_Technicians_TechnicianID",
-                        column: x => x.TechnicianID,
-                        principalTable: "Technicians",
-                        principalColumn: "TechnicianID",
+                        name: "FK_Technicians_Managers_ManagerID",
+                        column: x => x.ManagerID,
+                        principalTable: "Managers",
+                        principalColumn: "ManagerID",
                         onDelete: ReferentialAction.NoAction);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "OrderDetails",
-                columns: table => new
-                {
-                    OrderID = table.Column<int>(type: "int", nullable: false),
-                    ServiceID = table.Column<int>(type: "int", nullable: false),
-                    TechnicianID = table.Column<int>(type: "int", nullable: false),
-                    Image = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrderDetails", x => new { x.OrderID, x.ServiceID, x.TechnicianID });
                     table.ForeignKey(
-                        name: "FK_OrderDetails_Orders_OrderID",
-                        column: x => x.OrderID,
-                        principalTable: "Orders",
-                        principalColumn: "OrderID",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Technicians_Stations_StationID",
+                        column: x => x.StationID,
+                        principalTable: "Stations",
+                        principalColumn: "StationID",
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_OrderDetails_Services_ServiceID",
-                        column: x => x.ServiceID,
-                        principalTable: "Services",
-                        principalColumn: "ServiceID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_OrderDetails_Technicians_TechnicianID",
-                        column: x => x.TechnicianID,
-                        principalTable: "Technicians",
-                        principalColumn: "TechnicianID",
+                        name: "FK_Technicians_Wallets_WalletID",
+                        column: x => x.WalletID,
+                        principalTable: "Wallets",
+                        principalColumn: "WalletID",
                         onDelete: ReferentialAction.NoAction);
                 });
 
@@ -306,22 +223,21 @@ namespace MrKoolApplication.Migrations
                 name: "Requests",
                 columns: table => new
                 {
-                    RequestID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Date = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AreaID = table.Column<int>(type: "int", nullable: false),
                     CustomerID = table.Column<int>(type: "int", nullable: false),
                     StationID = table.Column<int>(type: "int", nullable: false),
                     ManagerID = table.Column<int>(type: "int", nullable: false),
                     OrderID = table.Column<int>(type: "int", nullable: false),
-                    TechnicianID = table.Column<int>(type: "int", nullable: false)
+                    TechnicianID = table.Column<int>(type: "int", nullable: false),
+                    RequestID = table.Column<int>(type: "int", nullable: false),
+                    Date = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RequestAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Requests", x => x.RequestID);
+                    table.PrimaryKey("PK_Requests", x => new { x.OrderID, x.AreaID, x.CustomerID, x.TechnicianID, x.StationID, x.ManagerID });
                     table.ForeignKey(
                         name: "FK_Requests_Areas_AreaID",
                         column: x => x.AreaID,
@@ -358,6 +274,109 @@ namespace MrKoolApplication.Migrations
                         principalTable: "Technicians",
                         principalColumn: "TechnicianID",
                         onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Services",
+                columns: table => new
+                {
+                    ServiceID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ServiceTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Date = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RequestOrderID = table.Column<int>(type: "int", nullable: false),
+                    RequestAreaID = table.Column<int>(type: "int", nullable: false),
+                    RequestCustomerID = table.Column<int>(type: "int", nullable: false),
+                    RequestTechnicianID = table.Column<int>(type: "int", nullable: false),
+                    RequestStationID = table.Column<int>(type: "int", nullable: false),
+                    RequestManagerID = table.Column<int>(type: "int", nullable: false),
+                    ModelConditionerModelID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Services", x => x.ServiceID);
+                    table.ForeignKey(
+                        name: "FK_Services_Models_ModelConditionerModelID",
+                        column: x => x.ModelConditionerModelID,
+                        principalTable: "Models",
+                        principalColumn: "ConditionerModelID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Services_Requests_RequestOrderID_RequestAreaID_RequestCustomerID_RequestTechnicianID_RequestStationID_RequestManagerID",
+                        columns: x => new { x.RequestOrderID, x.RequestAreaID, x.RequestCustomerID, x.RequestTechnicianID, x.RequestStationID, x.RequestManagerID },
+                        principalTable: "Requests",
+                        principalColumns: new[] { "OrderID", "AreaID", "CustomerID", "TechnicianID", "StationID", "ManagerID" },
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FixHistories",
+                columns: table => new
+                {
+                    TechnicianID = table.Column<int>(type: "int", nullable: false),
+                    CustomerID = table.Column<int>(type: "int", nullable: false),
+                    FixHistoryID = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ServiceID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FixHistories", x => new { x.CustomerID, x.TechnicianID });
+                    table.ForeignKey(
+                        name: "FK_FixHistories_Customers_CustomerID",
+                        column: x => x.CustomerID,
+                        principalTable: "Customers",
+                        principalColumn: "CustomerID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FixHistories_Services_ServiceID",
+                        column: x => x.ServiceID,
+                        principalTable: "Services",
+                        principalColumn: "ServiceID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FixHistories_Technicians_TechnicianID",
+                        column: x => x.TechnicianID,
+                        principalTable: "Technicians",
+                        principalColumn: "TechnicianID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrderDetails",
+                columns: table => new
+                {
+                    OrderID = table.Column<int>(type: "int", nullable: false),
+                    ServiceID = table.Column<int>(type: "int", nullable: false),
+                    TechnicianID = table.Column<int>(type: "int", nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderDetails", x => new { x.OrderID, x.ServiceID, x.TechnicianID });
+                    table.ForeignKey(
+                        name: "FK_OrderDetails_Orders_OrderID",
+                        column: x => x.OrderID,
+                        principalTable: "Orders",
+                        principalColumn: "OrderID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrderDetails_Services_ServiceID",
+                        column: x => x.ServiceID,
+                        principalTable: "Services",
+                        principalColumn: "ServiceID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrderDetails_Technicians_TechnicianID",
+                        column: x => x.TechnicianID,
+                        principalTable: "Technicians",
+                        principalColumn: "TechnicianID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -416,11 +435,6 @@ namespace MrKoolApplication.Migrations
                 column: "ManagerID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Requests_OrderID",
-                table: "Requests",
-                column: "OrderID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Requests_StationID",
                 table: "Requests",
                 column: "StationID");
@@ -436,9 +450,19 @@ namespace MrKoolApplication.Migrations
                 column: "ModelConditionerModelID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Services_RequestOrderID_RequestAreaID_RequestCustomerID_RequestTechnicianID_RequestStationID_RequestManagerID",
+                table: "Services",
+                columns: new[] { "RequestOrderID", "RequestAreaID", "RequestCustomerID", "RequestTechnicianID", "RequestStationID", "RequestManagerID" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Stations_AreaID",
                 table: "Stations",
                 column: "AreaID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Stations_ManagerID",
+                table: "Stations",
+                column: "ManagerID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Technicians_ManagerID",
@@ -471,10 +495,13 @@ namespace MrKoolApplication.Migrations
                 name: "OrderDetails");
 
             migrationBuilder.DropTable(
-                name: "Requests");
+                name: "Services");
 
             migrationBuilder.DropTable(
-                name: "Services");
+                name: "Models");
+
+            migrationBuilder.DropTable(
+                name: "Requests");
 
             migrationBuilder.DropTable(
                 name: "Orders");
@@ -483,25 +510,22 @@ namespace MrKoolApplication.Migrations
                 name: "Technicians");
 
             migrationBuilder.DropTable(
-                name: "Models");
-
-            migrationBuilder.DropTable(
                 name: "Customers");
 
             migrationBuilder.DropTable(
                 name: "Transactions");
 
             migrationBuilder.DropTable(
-                name: "Managers");
-
-            migrationBuilder.DropTable(
                 name: "Stations");
 
             migrationBuilder.DropTable(
-                name: "Wallets");
+                name: "Areas");
 
             migrationBuilder.DropTable(
-                name: "Areas");
+                name: "Managers");
+
+            migrationBuilder.DropTable(
+                name: "Wallets");
         }
     }
 }

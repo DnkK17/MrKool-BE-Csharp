@@ -11,6 +11,7 @@
 
         public Area Area { get; set; }
 
+        public Manager Manager { get; set; }
         public ICollection<Technician> TechnicianList { get; set; }
     }
 }

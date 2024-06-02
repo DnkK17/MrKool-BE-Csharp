@@ -8,6 +8,7 @@
         public string Password { get; set; }
         public string Status { get; set; }
 
+        public string TechnicianName { get; set; }
         // Relationships
         public Manager Manager { get; set; }
 
