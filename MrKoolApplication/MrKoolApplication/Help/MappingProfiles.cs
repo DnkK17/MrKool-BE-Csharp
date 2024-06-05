@@ -13,6 +13,7 @@ namespace MrKoolApplication.Help
             CreateMap<Service, ServiceDTO>();
             CreateMap<RequestDTO, Request>();
             CreateMap<Request, RequestDTO>();
+            CreateMap<ConditionerModel, ConditionerModelDTO>();
         }
     }
 }

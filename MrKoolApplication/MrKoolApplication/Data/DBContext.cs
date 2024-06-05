@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MrKool.Models;
+using MrKoolApplication.Models;
 using System.Data;
 using System.Reflection.Metadata;
 
@@ -24,6 +25,8 @@ namespace MrKool.Data
         public DbSet<Technician> Technicians { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Wallet> Wallets { get; set; }
+
+        public DbSet<User> Users { get; set; }
 
  
         protected override void OnModelCreating(ModelBuilder modelBuilder)

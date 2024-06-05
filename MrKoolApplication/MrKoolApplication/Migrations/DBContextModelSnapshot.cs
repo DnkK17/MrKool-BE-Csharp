@@ -82,24 +82,21 @@ namespace MrKoolApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("Gender")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Telephone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("userId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("CustomerID");
 
                     b.HasIndex("AreaID");
+
+                    b.HasIndex("userId");
 
                     b.ToTable("Customers");
                 });
@@ -150,14 +147,6 @@ namespace MrKoolApplication.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ManagerID"));
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -169,9 +158,14 @@ namespace MrKoolApplication.Migrations
                     b.Property<long>("WalletID")
                         .HasColumnType("bigint");
 
+                    b.Property<Guid>("userId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("ManagerID");
 
                     b.HasIndex("WalletID");
+
+                    b.HasIndex("userId");
 
                     b.ToTable("Managers");
                 });
@@ -388,16 +382,8 @@ namespace MrKoolApplication.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TechnicianID"));
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("ManagerID")
                         .HasColumnType("int");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StationID")
                         .HasColumnType("int");
@@ -417,6 +403,9 @@ namespace MrKoolApplication.Migrations
                     b.Property<long>("WalletID")
                         .HasColumnType("bigint");
 
+                    b.Property<Guid>("userId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("TechnicianID");
 
                     b.HasIndex("ManagerID");
@@ -424,6 +413,8 @@ namespace MrKoolApplication.Migrations
                     b.HasIndex("StationID");
 
                     b.HasIndex("WalletID");
+
+                    b.HasIndex("userId");
 
                     b.ToTable("Technicians");
                 });
@@ -471,6 +462,29 @@ namespace MrKoolApplication.Migrations
                     b.ToTable("Wallets");
                 });
 
+            modelBuilder.Entity("MrKoolApplication.Models.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("HashPassword")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("RoleName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("SaltPassword")
+                        .HasColumnType("varbinary(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("User");
+                });
+
             modelBuilder.Entity("MrKool.Models.Customer", b =>
                 {
                     b.HasOne("MrKool.Models.Area", "Area")
@@ -479,7 +493,15 @@ namespace MrKoolApplication.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("MrKoolApplication.Models.User", "user")
+                        .WithMany()
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Area");
+
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("MrKool.Models.FixHistory", b =>
@@ -517,7 +539,15 @@ namespace MrKoolApplication.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("MrKoolApplication.Models.User", "user")
+                        .WithMany()
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Wallet");
+
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("MrKool.Models.Order", b =>
@@ -675,11 +705,19 @@ namespace MrKoolApplication.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("MrKoolApplication.Models.User", "user")
+                        .WithMany()
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Manager");
 
                     b.Navigation("Station");
 
                     b.Navigation("Wallet");
+
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("MrKool.Models.Transaction", b =>

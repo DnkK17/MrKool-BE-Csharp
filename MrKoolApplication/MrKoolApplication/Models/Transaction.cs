@@ -6,6 +6,8 @@
         public long Amount { get; set; }
         public DateTime Date { get; set; }
 
+        public bool Status { get; set; }
+
         // Relationships
         public Wallet Wallet { get; set; }
 

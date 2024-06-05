@@ -4,6 +4,8 @@
     {
         public string Image { get; set; }
 
+        public bool Status { get; set; }
+
         // Relationships
         public int OrderID { get; set; }
 

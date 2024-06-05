@@ -21,12 +21,8 @@ namespace MrKool.Repository
         }
         public async Task<List<Area>> GetAllAsync(params Expression<Func<Area, object>>[] includes)
         {
-            IQueryable<Area> query = _context.Set<Area>();
-            foreach (var include in includes)
-            {
-                query = query.Include(include);
-            }
-            return await query.ToListAsync();
+        
+            return await _context.Areas.Include(a => a.StationList).ToListAsync();
         }
         public Area GetById(int areaID)
         {

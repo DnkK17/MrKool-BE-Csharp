@@ -9,6 +9,8 @@
         public string Detail { get; set; }
         public string Address { get; set; }
 
+        public bool Status { get; set; }
+
         // Relationships
         public ICollection<OrderDetail> OrderDetailList { get; set; }
 

@@ -41,6 +41,21 @@ namespace MrKoolApplication.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "User",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HashPassword = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    SaltPassword = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    RoleName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Wallets",
                 columns: table => new
                 {
@@ -60,11 +75,10 @@ namespace MrKoolApplication.Migrations
                 {
                     CustomerID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Telephone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CustomerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Gender = table.Column<bool>(type: "bit", nullable: false),
+                    userId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AreaID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -76,6 +90,12 @@ namespace MrKoolApplication.Migrations
                         principalTable: "Areas",
                         principalColumn: "AreaID",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Customers_User_userId",
+                        column: x => x.userId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -85,14 +105,19 @@ namespace MrKoolApplication.Migrations
                     ManagerID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Telephone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    userId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     WalletID = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Managers", x => x.ManagerID);
+                    table.ForeignKey(
+                        name: "FK_Managers_User_userId",
+                        column: x => x.userId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Managers_Wallets_WalletID",
                         column: x => x.WalletID,
@@ -188,10 +213,9 @@ namespace MrKoolApplication.Migrations
                     TechnicianID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Telephone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TechnicianName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    userId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ManagerID = table.Column<int>(type: "int", nullable: false),
                     StationID = table.Column<int>(type: "int", nullable: false),
                     WalletID = table.Column<long>(type: "bigint", nullable: false)
@@ -204,12 +228,18 @@ namespace MrKoolApplication.Migrations
                         column: x => x.ManagerID,
                         principalTable: "Managers",
                         principalColumn: "ManagerID",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Technicians_Stations_StationID",
                         column: x => x.StationID,
                         principalTable: "Stations",
                         principalColumn: "StationID",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_Technicians_User_userId",
+                        column: x => x.userId,
+                        principalTable: "User",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Technicians_Wallets_WalletID",
@@ -364,25 +394,30 @@ namespace MrKoolApplication.Migrations
                         column: x => x.OrderID,
                         principalTable: "Orders",
                         principalColumn: "OrderID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_OrderDetails_Services_ServiceID",
                         column: x => x.ServiceID,
                         principalTable: "Services",
                         principalColumn: "ServiceID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_OrderDetails_Technicians_TechnicianID",
                         column: x => x.TechnicianID,
                         principalTable: "Technicians",
                         principalColumn: "TechnicianID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Customers_AreaID",
                 table: "Customers",
                 column: "AreaID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Customers_userId",
+                table: "Customers",
+                column: "userId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FixHistories_ServiceID",
@@ -393,6 +428,11 @@ namespace MrKoolApplication.Migrations
                 name: "IX_FixHistories_TechnicianID",
                 table: "FixHistories",
                 column: "TechnicianID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Managers_userId",
+                table: "Managers",
+                column: "userId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Managers_WalletID",
@@ -475,6 +515,11 @@ namespace MrKoolApplication.Migrations
                 column: "StationID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Technicians_userId",
+                table: "Technicians",
+                column: "userId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Technicians_WalletID",
                 table: "Technicians",
                 column: "WalletID");
@@ -523,6 +568,9 @@ namespace MrKoolApplication.Migrations
 
             migrationBuilder.DropTable(
                 name: "Managers");
+
+            migrationBuilder.DropTable(
+                name: "User");
 
             migrationBuilder.DropTable(
                 name: "Wallets");

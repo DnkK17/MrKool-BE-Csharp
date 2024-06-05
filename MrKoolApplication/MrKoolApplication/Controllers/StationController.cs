@@ -24,15 +24,32 @@ namespace MrKool.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Area>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<Station>))]
         public ActionResult GetAllStations()
         {
-            var areas = _mapper.Map<List<StationDTO>>(_stationRepository.GetAll());
+            var stations = _mapper.Map<List<StationDTO>>(_stationRepository.GetAll());
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            return Ok(areas);
+            return Ok(stations);
+        }
+
+        [HttpGet("{id}")]
+        public ActionResult<Station> GetAreaById(int id)
+        {
+            var stations = _stationRepository.GetById(id);
+            if (stations == null)
+            {
+                return NotFound();
+            }
+            return stations;
+        }
+
+        [HttpGet("search/{keyword}")]
+        public ActionResult<IEnumerable<Station>> SearchStations(string keyword)
+        {
+            return _stationRepository.GetByNameContaining(keyword);
         }
 
     }

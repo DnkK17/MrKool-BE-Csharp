@@ -8,6 +8,8 @@
         public string Type { get; set; }
         public string Description { get; set; }
 
+        public bool Status { get; set; }
+
         // Relationships
         public int TechnicianID {  get; set; }
         public Technician Technician { get; set; }
