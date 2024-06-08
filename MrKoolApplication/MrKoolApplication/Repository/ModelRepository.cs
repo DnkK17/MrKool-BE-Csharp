@@ -27,12 +27,44 @@ namespace MrKoolApplication.Repository
             return _context.Models.ToList();
         }
 
+        public List<ConditionerModel> GetModels()
+        {
+            return _context.Models.ToList();
+        }
+
 
         public List<ConditionerModel> GetByNameContaining(string name)
         {
             return _context.Models.Where(a => a.Title.Contains(name)).ToList();
         }
 
-     
+        //CRUD
+        public bool ModelExist(int modelID)
+        {
+            return _context.Set<ConditionerModel>().Any(a => a.ConditionerModelID== modelID);
+        }
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
+        }
+
+        public bool CreateModel(ConditionerModel model)
+        {
+            _context.Add(model);
+            return Save();
+        }
+
+        public bool UpdateModel(ConditionerModel model)
+        {
+            _context.Update(model);
+            return Save();
+        }
+
+        public bool DeleteModel(ConditionerModel model)
+        {
+            _context.Models.Remove(model);
+            return Save();
+        }
     }
 }

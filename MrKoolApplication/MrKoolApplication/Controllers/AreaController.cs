@@ -12,7 +12,7 @@ namespace MrKool.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AreaController : Controller
+    public class AreaController : ControllerBase
     {
         private readonly IAreaRepository _areaRepository;
         private readonly IMapper _mapper;
@@ -51,5 +51,51 @@ namespace MrKool.Controllers
         }
 
 
+        //CRUD
+
+        [HttpPost("/CreateArea")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateArea([FromBody] Area areaCreate)
+        {
+            if (areaCreate == null) return BadRequest();
+            var area = _areaRepository.GetAreas().Where(c => c.Title == areaCreate.Title);
+            if (area != null)
+            {
+                return BadRequest();
+            }
+            var areaMap = _mapper.Map<Area>(areaCreate);
+            if (!_areaRepository.CreateArea(areaMap))
+                return StatusCode(500);
+
+            return Ok("Successfully");
+        }
+
+        [HttpPut("/UpdateArea/{areaID}")]
+        public IActionResult UpdateArea(int areaID, [FromBody] Area areaUpdate)
+        {
+            if(areaUpdate == null) return BadRequest();
+            if(areaID != areaUpdate.AreaID) return BadRequest();
+            if(!_areaRepository.AreaExist(areaID)) return BadRequest();
+            var areaMap = _mapper.Map<Area>(areaUpdate);
+            if(!_areaRepository.UpdateArea(areaMap))
+            {
+                return StatusCode(500);
+            }
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteArea(int id)
+        {
+            var area = _areaRepository.GetById(id);
+            if (area == null)
+            {
+                return NotFound();
+            }
+            _areaRepository.DeleteArea(area);
+
+            return NoContent();
+        }
     }
 }

@@ -6,7 +6,7 @@
         public string Date { get; set; }
         public string Description { get; set; }
         public string RequestAddress { get; set; }
-        public string Status { get; set; }
+        public bool Status { get; set; }
 
         // Relationships
         public int AreaID   { get; set; }

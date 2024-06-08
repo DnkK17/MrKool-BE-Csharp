@@ -10,9 +10,10 @@ namespace MrKool.Models
 
         public string City { get; set; }    
 
+        public bool Status { get; set; }
         // Relationship
-        public ICollection<Customer> CustomerList { get; set; }
-        public List<Station> StationList { get; set; }
-        public ICollection<Request> RequestList { get; set; }
+        public ICollection<Customer>? CustomerList { get; set; }
+        public List<Station>? StationList { get; set; }
+        public ICollection<Request>? RequestList { get; set; }
     }
 }

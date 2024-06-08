@@ -10,5 +10,14 @@ namespace MrKool.Interface
         Area GetById(int areaID);
         List<Area> GetByNameContaining(string name);
         List<Area> GetByCity(string city);
+
+        List<Area> GetAreas();
+
+        bool AreaExist(int areaID); 
+        bool UpdateArea(Area area);
+
+        bool CreateArea(Area area);
+
+        bool DeleteArea(Area area);
     }
 }

@@ -49,6 +49,51 @@ namespace MrKoolApplication.Controllers
             return _modelRepository.GetByNameContaining(keyword);
         }
 
+        //CRUD
 
+        [HttpPost("/CreateModel")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateModel([FromBody] ConditionerModel modelCreate)
+        {
+            if (modelCreate == null) return BadRequest();
+            var model = _modelRepository.GetModels().Where(c => c.Title == modelCreate.Title);
+            if (model != null)
+            {
+                return BadRequest();
+            }
+            var modelMap = _mapper.Map<ConditionerModel>(modelCreate);
+            if (!_modelRepository.CreateModel(modelMap))
+                return StatusCode(500);
+
+            return Ok("Successfully");
+        }
+
+        [HttpPut("/UpdateModel/{modelID}")]
+        public IActionResult UpdateModel(int modelID, [FromBody] ConditionerModel modelUpdate)
+        {
+            if (modelUpdate == null) return BadRequest();
+            if (modelID != modelUpdate.ConditionerModelID) return BadRequest();
+            if (!_modelRepository.ModelExist(modelID)) return BadRequest();
+            var modelMap = _mapper.Map<ConditionerModel>(modelUpdate);
+            if (!_modelRepository.UpdateModel(modelMap))
+            {
+                return StatusCode(500);
+            }
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteModel(int id)
+        {
+            var model = _modelRepository.GetById(id);
+            if (model == null)
+            {
+                return NotFound();
+            }
+            _modelRepository.DeleteModel(model);
+
+            return NoContent();
+        }
     }
 }
