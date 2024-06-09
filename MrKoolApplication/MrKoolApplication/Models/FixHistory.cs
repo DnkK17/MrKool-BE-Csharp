@@ -11,15 +11,15 @@
         public bool Status { get; set; }
 
         // Relationships
-        public int TechnicianID {  get; set; }
-        public Technician Technician { get; set; }
+        public int? TechnicianID {  get; set; }
+        public Technician? Technician { get; set; }
 
-        public int CustomerID { get; set; }
+        public int? CustomerID { get; set; }
 
-        public Customer Customer { get; set; }
+        public Customer? Customer { get; set; }
 
-        public int ServiceID { get; set; }
+        public int? ServiceID { get; set; }
 
-        public Service Service { get; set; }
+        public Service? Service { get; set; }
     }
 }

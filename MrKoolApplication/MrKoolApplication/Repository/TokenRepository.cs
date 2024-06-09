@@ -15,7 +15,7 @@ namespace MrKoolApplication.Repository
         {
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]));
         }
-        public string CreateToken(User user)
+        public string CreateToken(Users user)
         {
             var claims = new List<Claim>
             {

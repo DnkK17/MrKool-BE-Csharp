@@ -9,6 +9,6 @@
         public bool Status { get; set; }
 
         // Relationship
-        public ICollection<Service> ServiceList { get; set; }
+        public ICollection<Service>? ServiceList { get; set; }
     }
 }

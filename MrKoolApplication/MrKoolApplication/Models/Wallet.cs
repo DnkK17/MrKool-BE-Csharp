@@ -13,6 +13,6 @@
         public int TechnicianID {  get; set; }
         public Technician Technician { get; set; } = null!;*/
 
-        public ICollection<Transaction> TransactionList { get; set; }
+        public ICollection<Transaction>? TransactionList { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace MrKoolApplication.Models
 {
-    public class User
+    public class Users
     {
         public Guid Id { get; set; }
 

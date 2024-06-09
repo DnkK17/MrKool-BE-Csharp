@@ -13,9 +13,9 @@ namespace MrKool.Models
         public bool Status { get; set; }
 
         // Relationships
-        public ICollection<OrderDetail> OrderDetailList { get; set; }
+        public ICollection<OrderDetail>? OrderDetailList { get; set; }
         
-        public Request Request { get; set; }
-        public ConditionerModel Model { get; set; }
+        public Request? Request { get; set; }
+        public ConditionerModel? Model { get; set; }
     }
 }

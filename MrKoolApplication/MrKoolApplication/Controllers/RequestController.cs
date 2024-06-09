@@ -65,7 +65,7 @@ namespace MrKoolApplication.Controllers
                 Date = "a",
                 Description = "a",
                 RequestAddress = "a",
-                Status = "a",
+                Status = true,
                 CustomerID = 1,
                 ManagerID = 1,
                 OrderID = 1,

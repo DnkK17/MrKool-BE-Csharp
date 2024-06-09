@@ -22,17 +22,7 @@ namespace MrKool.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Area>))]
-        public async Task<ActionResult<IEnumerable<Area>>> GetActionResultAsync()
-        {
-            {
-                var areas = await _areaRepository.GetAllAsync() ;
-                var areaDTOs = _mapper.Map<IEnumerable<Area>>(areas);
-                return Ok(areaDTOs);
-            }
-        }
-
+      
         [HttpGet("{id}")]
         public ActionResult<Area> GetAreaById(int id)
         {

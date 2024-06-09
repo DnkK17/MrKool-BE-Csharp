@@ -23,7 +23,7 @@ namespace MrKoolApplication.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<AuthDTO>> Login(LoginDTO loginDTO, string roleName,string name)
+        public async Task<ActionResult<AuthDTO>> Login(LoginDTO loginDTO)
         {
             var user = await _context.Users.SingleOrDefaultAsync(x => x.Email == loginDTO.Email );
             if (user == null) { return Unauthorized(); }
@@ -33,23 +33,9 @@ namespace MrKoolApplication.Controllers
             {
                 if(computedHash[i] != user.HashPassword[i]) return Unauthorized();
             }
-            user.RoleName = roleName;
-            _context.Users.Update(user);
-            await _context.SaveChangesAsync();
+            
+           
 
-            if (roleName.ToLower() == "customer")
-            {
-                // Create a new customer with the same email and plain password
-                var newCustomer = new Customer
-                {
-                    Email = loginDTO.Email,
-                    Password = loginDTO.Password, // Store the plain password as per your requirement
-                    user.Id = loginDTO.
-                };
-            }
-
-            _context.Customers.Add(newCustomer);
-            await _context.SaveChangesAsync();
             return new AuthDTO
             {
                 Token = _tokenRepository.CreateToken(user),
@@ -57,25 +43,67 @@ namespace MrKoolApplication.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<AuthDTO>> Register(RegisterDTO registerDto)
+        public async Task<ActionResult<AuthDTO>> Register(RegisterDTO registerDto, string roleName)
         {
-            using var hmac = new HMACSHA512();
-            //if (await UserExists(registerDto.Email)) return BadRequest("UserEmail  Is Already Taken");
-            var user = new User
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
             {
-                Id = Guid.NewGuid(),
-                Email = registerDto.Email.ToLower(),
-                HashPassword = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
-                SaltPassword = hmac.Key,
-            };
+                using var hmac = new HMACSHA512();
+                var user = new Users
+                {
+                    Id = Guid.NewGuid(),
+                    Email = registerDto.Email.ToLower(),
+                    HashPassword = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
+                    SaltPassword = hmac.Key,
+                    RoleName = roleName
+                };
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+                // Add the user to the context and save to get the user ID
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
 
-            return new AuthDTO
+                if (roleName.ToLower() == "customer")
+                {
+                    var newCustomer = new Customer
+                    {
+                        Email = registerDto.Email,
+                        Password = registerDto.Password,
+                        Telephone = registerDto.Telephone,
+                        userID = user.Id,
+                        CustomerName = registerDto.name,
+                        Status = true
+                    };
+                    _context.Customers.Add(newCustomer);
+                    await _context.SaveChangesAsync();
+                }
+                else if (roleName.ToLower() == "technician")
+                {
+                    var newTechnician = new Technician
+                    {
+                        Email = registerDto.Email,
+                        Password = registerDto.Password,
+                        Telephone = registerDto.Telephone,
+                        userID = user.Id,
+                        TechnicianName = registerDto.name
+                    };
+                    _context.Technicians.Add(newTechnician);
+                    await _context.SaveChangesAsync();
+                }
+
+                // Commit the transaction
+                await transaction.CommitAsync();
+
+                return new AuthDTO
+                {
+                    Token = _tokenRepository.CreateToken(user),
+                };
+            }
+            catch (Exception ex)
             {
-                Token =  _tokenRepository.CreateToken(user),
-            };
+                await transaction.RollbackAsync();
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
         }
+
     }
 }

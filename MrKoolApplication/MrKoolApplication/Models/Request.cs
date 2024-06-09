@@ -19,11 +19,11 @@
         public Station Station { get; set; }
 
         public int ManagerID { get; set; }
-        public Manager Manager { get; set; }
+        public Manager? Manager { get; set; }
         public List<Service> Services { get; set; }
         public int OrderID { get; set; }
-        public Order Order { get; set; } = null!;
+        public Order? Order { get; set; }
         public int TechnicianID { get; set; }
-        public Technician Technician { get; set; }
+        public Technician? Technician { get; set; }
     }
 }

@@ -11,12 +11,12 @@ namespace MrKool.Models
         public bool Status { get; set; }
 
         // Relationships
-        public int userID   { get; set; }
-        public User user { get; set; }
-        public ICollection<Technician> TechnicianList { get; set; }
-        public ICollection<Request> RequestList { get; set; }
+        public Guid userID   { get; set; }
+        public Users user { get; set; }
+        public ICollection<Technician>? TechnicianList { get; set; }
+        public ICollection<Request>? RequestList { get; set; }
 
-        public ICollection<Station> StationList { get; set; }
-        public Wallet Wallet { get; set; }
+        public ICollection<Station>? StationList { get; set; }
+        public Wallet? Wallet { get; set; }
     }
 }

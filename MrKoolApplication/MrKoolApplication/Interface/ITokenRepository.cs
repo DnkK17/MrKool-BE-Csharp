@@ -4,6 +4,6 @@ namespace MrKoolApplication.Interface
 {
     public interface ITokenRepository
     {
-        string CreateToken(User user);
+        string CreateToken(Users user);
     }
 }

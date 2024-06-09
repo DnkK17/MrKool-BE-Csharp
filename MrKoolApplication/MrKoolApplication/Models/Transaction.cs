@@ -9,7 +9,7 @@
         public bool Status { get; set; }
 
         // Relationships
-        public Wallet Wallet { get; set; }
+        public Wallet? Wallet { get; set; }
 
     }
 }

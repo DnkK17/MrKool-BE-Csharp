@@ -8,11 +8,11 @@
         public bool Status  { get; set; }
 
         // Relationships
-        public ICollection<Request> RequestList { get; set; }
+        public ICollection<Request>? RequestList { get; set; }
 
         public Area Area { get; set; }
 
-        public Manager Manager { get; set; }
-        public ICollection<Technician> TechnicianList { get; set; }
+        public Manager? Manager { get; set; }
+        public ICollection<Technician>? TechnicianList { get; set; }
     }
 }

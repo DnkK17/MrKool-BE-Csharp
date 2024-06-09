@@ -12,16 +12,16 @@ namespace MrKool.Models
         public string TechnicianName { get; set; }
         
         // Relationships
-        public int userID { get; set; }
-        public User user { get; set; }
-        public Manager Manager { get; set; }
+        public Guid userID { get; set; }
+        public Users user { get; set; }
+        public Manager? Manager { get; set; }
 
-        public Station Station { get; set; }
+        public Station? Station { get; set; }
 
-        public Wallet Wallet { get; set; }
+        public Wallet? Wallet { get; set; }
 
-        public ICollection<Request> RequestList { get; set; }
-        public ICollection<OrderDetail> OrderDetailList { get; set; }
-        public ICollection<FixHistory> FixHistoryList { get; set; }
+        public ICollection<Request>? RequestList { get; set; }
+        public ICollection<OrderDetail>? OrderDetailList { get; set; }
+        public ICollection<FixHistory>? FixHistoryList { get; set; }
     }
 }

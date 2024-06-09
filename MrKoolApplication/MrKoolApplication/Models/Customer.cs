@@ -16,12 +16,12 @@ namespace MrKool.Models
         public bool Status { get; set; }
 
         // Relationship
-        public int userID { get; set; }
-        public User user { get; set; }
-        public Area Area { get; set; }
+        public Guid userID { get; set; }
+        public Users user { get; set; }
+        public Area? Area { get; set; }
 
-        public virtual ICollection<Order> OrderList { get; set; }
-        public virtual ICollection<FixHistory> FixHistoryList { get; set; }
-        public virtual ICollection<Request> RequestList { get; set; }
+        public virtual ICollection<Order>? OrderList { get; set; }
+        public virtual ICollection<FixHistory>? FixHistoryList { get; set; }
+        public virtual ICollection<Request>? RequestList { get; set; }
     }
 }
