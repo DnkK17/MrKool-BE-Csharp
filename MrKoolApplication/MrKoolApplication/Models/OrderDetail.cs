@@ -5,6 +5,8 @@
         public string Image { get; set; }
 
         public bool Status { get; set; }
+        public bool IsDeleted { get; set; }
+
 
         // Relationships
         public int OrderID { get; set; }
@@ -18,5 +20,7 @@
         public int ServiceID { get; set; }
 
         public Service Service { get; set; }
+
+
     }
 }

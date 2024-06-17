@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using MrKool.Data;
 using MrKool.Interface;
 using MrKool.Models;
+using MrKoolApplication.DTO;
 
 namespace MrKool.Repository
 {
@@ -15,34 +16,53 @@ namespace MrKool.Repository
         private DBContext _context;
 
         private readonly IMapper _mapper;
-        public AreaRepository(DBContext context)
+        public AreaRepository(DBContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
-        public async Task<List<Area>> GetAllAsync(params Expression<Func<Area, object>>[] includes)
+        public async Task<IEnumerable<Area>> GetAllAreasAsync()
         {
-        
             return await _context.Areas.Include(a => a.StationList).ToListAsync();
         }
-        public Area GetById(int areaID)
+        public async Task<Area> GetById(int areaID)
         {
-            return _context.Set<Area>().SingleOrDefault(a => a.AreaID == areaID);
+            return await _context.Areas
+                                 .Include(a => a.StationList)
+                                 .FirstOrDefaultAsync(a => a.AreaID == areaID);
         }
+
 
         public List<Area> GetAreas()
         {
             return _context.Areas.ToList();
         }
 
-        
+
         public List<Area> GetByNameContaining(string name)
         {
-            return _context.Areas.Where(a => a.Title.Contains(name)).ToList();
+            return _context.Areas
+                           .Include(a => a.StationList)
+                           .Where(a => a.Title.Contains(name))
+                           .ToList();
         }
 
         public List<Area> GetByCity(string city)
         {
-            return _context.Areas.Where(a => a.City == city).ToList();
+            return _context.Areas
+                           .Include(a => a.StationList)
+                           .Where(a => a.City == city)
+                           .ToList();
+        }
+        public void AddStationToArea(int areaId, StationDTO stationDto)
+        {
+            var area = GetById(areaId);
+            if (area != null)
+            {
+                var station = _mapper.Map<Station>(stationDto);
+                station.Area.AreaID = areaId;
+                _context.Stations.Add(station);
+            }
         }
 
         //CRUD
@@ -68,10 +88,10 @@ namespace MrKool.Repository
             return Save();
         }
 
-        public bool DeleteArea(Area area)
+        public async Task DeleteAreaAsync(Area area)
         {
             _context.Areas.Remove(area);
-            return Save();
+            await _context.SaveChangesAsync();
         }
     }
 }

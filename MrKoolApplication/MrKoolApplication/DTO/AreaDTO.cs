@@ -1,4 +1,5 @@
 ﻿using MrKool.Models;
+using MrKoolApplication.DTO;
 
 namespace MrKool.DTO
 {
@@ -10,6 +11,6 @@ namespace MrKool.DTO
 
         public string City { get; set; }
 
-       
+       public List<StationDTO> Stations { get; set; }
     }
 }

@@ -55,10 +55,8 @@ namespace MrKoolApplication.Controllers
                     Email = registerDto.Email.ToLower(),
                     HashPassword = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
                     SaltPassword = hmac.Key,
-                    RoleName = roleName
+                    RoleName = roleName.ToLower(),
                 };
-
-                // Add the user to the context and save to get the user ID
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
 

@@ -38,6 +38,9 @@ namespace MrKoolApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
@@ -57,6 +60,9 @@ namespace MrKoolApplication.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ConditionerModelID"));
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
@@ -95,6 +101,9 @@ namespace MrKoolApplication.Migrations
                     b.Property<bool>("Gender")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -113,17 +122,21 @@ namespace MrKoolApplication.Migrations
 
                     b.HasIndex("AreaID");
 
-                    b.HasIndex("userID");
+                    b.HasIndex("userID")
+                        .IsUnique();
 
                     b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("MrKool.Models.FixHistory", b =>
                 {
-                    b.Property<int?>("CustomerID")
+                    b.Property<int>("FixHistoryID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("TechnicianID")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FixHistoryID"));
+
+                    b.Property<int?>("CustomerID")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
@@ -133,14 +146,14 @@ namespace MrKoolApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("FixHistoryID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ServiceID")
-                        .HasColumnType("int");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("TechnicianID")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -150,9 +163,9 @@ namespace MrKoolApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("CustomerID", "TechnicianID");
+                    b.HasKey("FixHistoryID");
 
-                    b.HasIndex("ServiceID");
+                    b.HasIndex("CustomerID");
 
                     b.HasIndex("TechnicianID");
 
@@ -171,6 +184,13 @@ namespace MrKoolApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ManagerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -182,17 +202,20 @@ namespace MrKoolApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("WalletID")
-                        .HasColumnType("bigint");
+                    b.Property<int?>("WalletID")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("userID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ManagerID");
 
-                    b.HasIndex("WalletID");
+                    b.HasIndex("WalletID")
+                        .IsUnique()
+                        .HasFilter("[WalletID] IS NOT NULL");
 
-                    b.HasIndex("userID");
+                    b.HasIndex("userID")
+                        .IsUnique();
 
                     b.ToTable("Managers");
                 });
@@ -220,8 +243,14 @@ namespace MrKoolApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Status")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<int>("RequestID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("Time")
                         .IsRequired()
@@ -248,20 +277,23 @@ namespace MrKoolApplication.Migrations
                     b.Property<int>("OrderID")
                         .HasColumnType("int");
 
-                    b.Property<int>("ServiceID")
+                    b.Property<int>("TechnicianID")
                         .HasColumnType("int");
 
-                    b.Property<int>("TechnicianID")
+                    b.Property<int>("ServiceID")
                         .HasColumnType("int");
 
                     b.Property<string>("Image")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
-                    b.HasKey("OrderID", "ServiceID", "TechnicianID");
+                    b.HasKey("OrderID", "TechnicianID", "ServiceID");
 
                     b.HasIndex("ServiceID");
 
@@ -272,22 +304,16 @@ namespace MrKoolApplication.Migrations
 
             modelBuilder.Entity("MrKool.Models.Request", b =>
                 {
-                    b.Property<int>("OrderID")
+                    b.Property<int>("RequestID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RequestID"));
 
                     b.Property<int>("AreaID")
                         .HasColumnType("int");
 
                     b.Property<int>("CustomerID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TechnicianID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StationID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ManagerID")
                         .HasColumnType("int");
 
                     b.Property<string>("Date")
@@ -298,23 +324,39 @@ namespace MrKoolApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("ManagerID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OrderID")
+                        .IsRequired()
+                        .HasColumnType("int");
+
                     b.Property<string>("RequestAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RequestID")
+                    b.Property<int>("StationID")
                         .HasColumnType("int");
 
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
-                    b.HasKey("OrderID", "AreaID", "CustomerID", "TechnicianID", "StationID", "ManagerID");
+                    b.Property<int?>("TechnicianID")
+                        .HasColumnType("int");
+
+                    b.HasKey("RequestID");
 
                     b.HasIndex("AreaID");
 
                     b.HasIndex("CustomerID");
 
                     b.HasIndex("ManagerID");
+
+                    b.HasIndex("OrderID")
+                        .IsUnique();
 
                     b.HasIndex("StationID");
 
@@ -339,28 +381,16 @@ namespace MrKoolApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ModelConditionerModelID")
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("ModelID")
                         .HasColumnType("int");
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<int?>("RequestAreaID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("RequestCustomerID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("RequestManagerID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("RequestOrderID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("RequestStationID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("RequestTechnicianID")
+                    b.Property<int?>("RequestID")
                         .HasColumnType("int");
 
                     b.Property<string>("ServiceTitle")
@@ -372,9 +402,9 @@ namespace MrKoolApplication.Migrations
 
                     b.HasKey("ServiceID");
 
-                    b.HasIndex("ModelConditionerModelID");
+                    b.HasIndex("ModelID");
 
-                    b.HasIndex("RequestOrderID", "RequestAreaID", "RequestCustomerID", "RequestTechnicianID", "RequestStationID", "RequestManagerID");
+                    b.HasIndex("RequestID");
 
                     b.ToTable("Services");
                 });
@@ -391,10 +421,13 @@ namespace MrKoolApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AreaID")
+                    b.Property<int?>("AreaID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ManagerID")
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ManagerID")
                         .HasColumnType("int");
 
                     b.Property<bool>("Status")
@@ -421,7 +454,10 @@ namespace MrKoolApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ManagerID")
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ManagerID")
                         .HasColumnType("int");
 
                     b.Property<string>("Password")
@@ -442,8 +478,8 @@ namespace MrKoolApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("WalletID")
-                        .HasColumnType("bigint");
+                    b.Property<int?>("WalletID")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("userID")
                         .HasColumnType("uniqueidentifier");
@@ -454,9 +490,12 @@ namespace MrKoolApplication.Migrations
 
                     b.HasIndex("StationID");
 
-                    b.HasIndex("WalletID");
+                    b.HasIndex("WalletID")
+                        .IsUnique()
+                        .HasFilter("[WalletID] IS NOT NULL");
 
-                    b.HasIndex("userID");
+                    b.HasIndex("userID")
+                        .IsUnique();
 
                     b.ToTable("Technicians");
                 });
@@ -475,11 +514,14 @@ namespace MrKoolApplication.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
-                    b.Property<long?>("WalletID")
-                        .HasColumnType("bigint");
+                    b.Property<int>("WalletID")
+                        .HasColumnType("int");
 
                     b.HasKey("TransactionID");
 
@@ -490,14 +532,17 @@ namespace MrKoolApplication.Migrations
 
             modelBuilder.Entity("MrKool.Models.Wallet", b =>
                 {
-                    b.Property<long>("WalletID")
+                    b.Property<int>("WalletID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("WalletID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WalletID"));
 
                     b.Property<long>("Balance")
                         .HasColumnType("bigint");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
@@ -505,6 +550,24 @@ namespace MrKoolApplication.Migrations
                     b.HasKey("WalletID");
 
                     b.ToTable("Wallets");
+                });
+
+            modelBuilder.Entity("MrKoolApplication.Models.FixHistoryService", b =>
+                {
+                    b.Property<int>("FixHistoryID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ServiceID")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("FixHistoryID", "ServiceID");
+
+                    b.HasIndex("ServiceID");
+
+                    b.ToTable("FixHistoryService", (string)null);
                 });
 
             modelBuilder.Entity("MrKoolApplication.Models.Users", b =>
@@ -534,11 +597,12 @@ namespace MrKoolApplication.Migrations
                 {
                     b.HasOne("MrKool.Models.Area", "Area")
                         .WithMany("CustomerList")
-                        .HasForeignKey("AreaID");
+                        .HasForeignKey("AreaID")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("MrKoolApplication.Models.Users", "user")
-                        .WithMany()
-                        .HasForeignKey("userID")
+                        .WithOne()
+                        .HasForeignKey("MrKool.Models.Customer", "userID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -552,22 +616,14 @@ namespace MrKoolApplication.Migrations
                     b.HasOne("MrKool.Models.Customer", "Customer")
                         .WithMany("FixHistoryList")
                         .HasForeignKey("CustomerID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MrKool.Models.Service", "Service")
-                        .WithMany()
-                        .HasForeignKey("ServiceID");
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("MrKool.Models.Technician", "Technician")
                         .WithMany("FixHistoryList")
                         .HasForeignKey("TechnicianID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Customer");
-
-                    b.Navigation("Service");
 
                     b.Navigation("Technician");
                 });
@@ -575,12 +631,12 @@ namespace MrKoolApplication.Migrations
             modelBuilder.Entity("MrKool.Models.Manager", b =>
                 {
                     b.HasOne("MrKool.Models.Wallet", "Wallet")
-                        .WithMany()
-                        .HasForeignKey("WalletID");
+                        .WithOne()
+                        .HasForeignKey("MrKool.Models.Manager", "WalletID");
 
                     b.HasOne("MrKoolApplication.Models.Users", "user")
-                        .WithMany()
-                        .HasForeignKey("userID")
+                        .WithOne()
+                        .HasForeignKey("MrKool.Models.Manager", "userID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -593,7 +649,8 @@ namespace MrKoolApplication.Migrations
                 {
                     b.HasOne("MrKool.Models.Customer", "Customer")
                         .WithMany("OrderList")
-                        .HasForeignKey("CustomerID");
+                        .HasForeignKey("CustomerID")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("MrKool.Models.Transaction", "Transaction")
                         .WithMany()
@@ -609,13 +666,13 @@ namespace MrKoolApplication.Migrations
                     b.HasOne("MrKool.Models.Order", "Order")
                         .WithMany("OrderDetailList")
                         .HasForeignKey("OrderID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("MrKool.Models.Service", "Service")
                         .WithMany("OrderDetailList")
                         .HasForeignKey("ServiceID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("MrKool.Models.Technician", "Technician")
@@ -636,38 +693,35 @@ namespace MrKoolApplication.Migrations
                     b.HasOne("MrKool.Models.Area", "Area")
                         .WithMany("RequestList")
                         .HasForeignKey("AreaID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("MrKool.Models.Customer", "Customer")
                         .WithMany("RequestList")
                         .HasForeignKey("CustomerID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("MrKool.Models.Manager", "Manager")
                         .WithMany("RequestList")
                         .HasForeignKey("ManagerID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("MrKool.Models.Order", "Order")
-                        .WithMany("RequestList")
-                        .HasForeignKey("OrderID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithOne("Request")
+                        .HasForeignKey("MrKool.Models.Request", "OrderID")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("MrKool.Models.Station", "Station")
                         .WithMany("RequestList")
                         .HasForeignKey("StationID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("MrKool.Models.Technician", "Technician")
                         .WithMany("RequestList")
-                        .HasForeignKey("TechnicianID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TechnicianID");
 
                     b.Navigation("Area");
 
@@ -686,11 +740,12 @@ namespace MrKoolApplication.Migrations
                 {
                     b.HasOne("MrKool.Models.ConditionerModel", "Model")
                         .WithMany("ServiceList")
-                        .HasForeignKey("ModelConditionerModelID");
+                        .HasForeignKey("ModelID")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("MrKool.Models.Request", "Request")
                         .WithMany("Services")
-                        .HasForeignKey("RequestOrderID", "RequestAreaID", "RequestCustomerID", "RequestTechnicianID", "RequestStationID", "RequestManagerID");
+                        .HasForeignKey("RequestID");
 
                     b.Navigation("Model");
 
@@ -702,12 +757,13 @@ namespace MrKoolApplication.Migrations
                     b.HasOne("MrKool.Models.Area", "Area")
                         .WithMany("StationList")
                         .HasForeignKey("AreaID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("MrKool.Models.Manager", "Manager")
                         .WithMany("StationList")
-                        .HasForeignKey("ManagerID");
+                        .HasForeignKey("ManagerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Area");
 
@@ -718,19 +774,22 @@ namespace MrKoolApplication.Migrations
                 {
                     b.HasOne("MrKool.Models.Manager", "Manager")
                         .WithMany("TechnicianList")
-                        .HasForeignKey("ManagerID");
+                        .HasForeignKey("ManagerID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.HasOne("MrKool.Models.Station", "Station")
                         .WithMany("TechnicianList")
-                        .HasForeignKey("StationID");
+                        .HasForeignKey("StationID")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("MrKool.Models.Wallet", "Wallet")
-                        .WithMany()
-                        .HasForeignKey("WalletID");
+                        .WithOne()
+                        .HasForeignKey("MrKool.Models.Technician", "WalletID");
 
                     b.HasOne("MrKoolApplication.Models.Users", "user")
-                        .WithMany()
-                        .HasForeignKey("userID")
+                        .WithOne()
+                        .HasForeignKey("MrKool.Models.Technician", "userID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -747,9 +806,30 @@ namespace MrKoolApplication.Migrations
                 {
                     b.HasOne("MrKool.Models.Wallet", "Wallet")
                         .WithMany("TransactionList")
-                        .HasForeignKey("WalletID");
+                        .HasForeignKey("WalletID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Wallet");
+                });
+
+            modelBuilder.Entity("MrKoolApplication.Models.FixHistoryService", b =>
+                {
+                    b.HasOne("MrKool.Models.FixHistory", "FixHistory")
+                        .WithMany("FixHistoryServices")
+                        .HasForeignKey("FixHistoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MrKool.Models.Service", "Service")
+                        .WithMany("FixHistoryServices")
+                        .HasForeignKey("ServiceID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FixHistory");
+
+                    b.Navigation("Service");
                 });
 
             modelBuilder.Entity("MrKool.Models.Area", b =>
@@ -775,6 +855,11 @@ namespace MrKoolApplication.Migrations
                     b.Navigation("RequestList");
                 });
 
+            modelBuilder.Entity("MrKool.Models.FixHistory", b =>
+                {
+                    b.Navigation("FixHistoryServices");
+                });
+
             modelBuilder.Entity("MrKool.Models.Manager", b =>
                 {
                     b.Navigation("RequestList");
@@ -788,7 +873,8 @@ namespace MrKoolApplication.Migrations
                 {
                     b.Navigation("OrderDetailList");
 
-                    b.Navigation("RequestList");
+                    b.Navigation("Request")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MrKool.Models.Request", b =>
@@ -798,6 +884,8 @@ namespace MrKoolApplication.Migrations
 
             modelBuilder.Entity("MrKool.Models.Service", b =>
                 {
+                    b.Navigation("FixHistoryServices");
+
                     b.Navigation("OrderDetailList");
                 });
 

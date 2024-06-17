@@ -1,58 +1,51 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MrKool.Data;
 using MrKool.Models;
 using MrKoolApplication.Interface;
-using System.Diagnostics.Metrics;
-using System.Linq.Expressions;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MrKoolApplication.Repository
 {
     public class RequestRepository : IRequestRepository
     {
-        private DBContext _context;
-
-        private readonly IMapper _mapper;
+        private readonly DBContext _context;
 
         public RequestRepository(DBContext context)
         {
             _context = context;
         }
 
-        public async Task<List<Request>> GetAllAsync(params Expression<Func<Request, object>>[] includes)
+        public async Task<IEnumerable<Request>> GetAllAsync()
         {
-            IQueryable<Request> query = _context.Set<Request>();
-            foreach (var include in includes)
-            {
-                query = query.Include(include);
-            }
-            return await query.ToListAsync();
+            return await _context.Requests
+                .Include(r => r.Services) // Include related entities if necessary
+                .ToListAsync();
         }
 
         public Request GetById(int requestID)
         {
-            return _context.Set<Request>().SingleOrDefault(a => a.RequestID == requestID);
+            return _context.Requests
+                .Include(r => r.Services) // Include related entities if necessary
+                .FirstOrDefault(r => r.RequestID == requestID);
         }
 
         public bool CreateRequest(Request request)
         {
-            _context.Set<Request>().Add(request);
+            _context.Requests.Add(request);
             return Save();
         }
 
-
         public bool UpdateRequest(Request request)
         {
-            _context.Update(request);
+            _context.Requests.Update(request);
             return Save();
         }
 
         public bool Save()
         {
-            var saved = _context.SaveChanges();
-            return saved > 0 ? true : false;
+            return _context.SaveChanges() > 0;
         }
-
-
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MrKool.Data;
 using MrKool.DTO;
 using MrKool.Interface;
@@ -7,6 +8,8 @@ using MrKool.Models;
 using MrKool.Repository;
 using MrKoolApplication.DTO;
 using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace MrKool.Controllers
 {
@@ -16,75 +19,111 @@ namespace MrKool.Controllers
     {
         private readonly IAreaRepository _areaRepository;
         private readonly IMapper _mapper;
+
         public AreaController(IAreaRepository areaRepository, IMapper mapper)
         {
             _areaRepository = areaRepository;
             _mapper = mapper;
         }
 
-      
-        [HttpGet("{id}")]
-        public ActionResult<Area> GetAreaById(int id)
+        [HttpGet]
+        [Route("Areas")]
+        public async Task<ActionResult<IEnumerable<AreaDTO>>> GetAreas()
         {
-            var area = _areaRepository.GetById(id);
+            var areas = await _areaRepository.GetAllAreasAsync();
+            var areaDTOs = _mapper.Map<IEnumerable<AreaDTO>>(areas);
+            return Ok(areaDTOs);
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<ActionResult<AreaDTO>> GetAreaByIdAsync(int id)
+        {
+            var area = await _areaRepository.GetById(id);
             if (area == null)
             {
                 return NotFound();
             }
-            return area;
+
+            var areaDto = _mapper.Map<AreaDTO>(area);
+            return Ok(areaDto);
         }
 
-        [HttpGet("search/{keyword}")]
-        public ActionResult<IEnumerable<Area>> SearchAreas(string keyword)
+        [HttpGet]
+        [Route("search/{keyword}")]
+        public ActionResult<IEnumerable<AreaDTO>> SearchAreas(string keyword)
         {
-            return _areaRepository.GetByNameContaining(keyword);
+            var areas = _areaRepository.GetByNameContaining(keyword);
+            var areaDtos = _mapper.Map<IEnumerable<AreaDTO>>(areas);
+            return Ok(areaDtos);
         }
 
+        [HttpPost("{areaId}/admin/addStation")]
+        public IActionResult AddStationToArea(int areaId, [FromBody] StationDTO station)
+        {
+            var area = _areaRepository.GetById(areaId);
+            if (area == null)
+            {
+                return NotFound("Area not found");
+            }
 
-        //CRUD
+            _areaRepository.AddStationToArea(areaId, station);
+            _areaRepository.Save();
 
-        [HttpPost("/CreateArea")]
+            return Ok(station);
+        }
+
+        [HttpPost]
+        [Route("CreateArea")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateArea([FromBody] Area areaCreate)
+        public IActionResult CreateArea([FromBody] AreaDTO areaCreate)
         {
             if (areaCreate == null) return BadRequest();
-            var area = _areaRepository.GetAreas().Where(c => c.Title == areaCreate.Title);
+
+            var area = _areaRepository.GetAreas().FirstOrDefault(c => c.Title == areaCreate.Title);
             if (area != null)
             {
-                return BadRequest();
+                return BadRequest("Area with the same title already exists.");
             }
+
             var areaMap = _mapper.Map<Area>(areaCreate);
             if (!_areaRepository.CreateArea(areaMap))
-                return StatusCode(500);
+            {
+                return StatusCode(500, "A problem happened while handling your request.");
+            }
 
-            return Ok("Successfully");
+            return Ok("Successfully created the area.");
         }
 
-        [HttpPut("/UpdateArea/{areaID}")]
+        [HttpPut]
+        [Route("UpdateArea/{areaID}")]
         public IActionResult UpdateArea(int areaID, [FromBody] Area areaUpdate)
         {
-            if(areaUpdate == null) return BadRequest();
-            if(areaID != areaUpdate.AreaID) return BadRequest();
-            if(!_areaRepository.AreaExist(areaID)) return BadRequest();
+            if (areaUpdate == null) return BadRequest();
+            if (areaID != areaUpdate.AreaID) return BadRequest();
+            if (!_areaRepository.AreaExist(areaID)) return BadRequest();
+
             var areaMap = _mapper.Map<Area>(areaUpdate);
-            if(!_areaRepository.UpdateArea(areaMap))
+            if (!_areaRepository.UpdateArea(areaMap))
             {
-                return StatusCode(500);
+                return StatusCode(500, "A problem happened while handling your request.");
             }
+
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteArea(int id)
+        [HttpDelete]
+        [Route("DeleteArea/{id}")]
+        public async Task<IActionResult> DeleteAreaAsync(int id)
         {
-            var area = _areaRepository.GetById(id);
+            var area = await _areaRepository.GetById(id);
             if (area == null)
             {
                 return NotFound();
             }
-            _areaRepository.DeleteArea(area);
 
+            area.IsDeleted = false;
             return NoContent();
         }
     }

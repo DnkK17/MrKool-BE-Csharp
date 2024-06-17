@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using MrKoolApplication.Models;
+using System.Reflection;
 
 namespace MrKool.Models
 {
@@ -12,10 +13,16 @@ namespace MrKool.Models
 
         public bool Status { get; set; }
 
+        public bool IsDeleted { get; set; }
         // Relationships
         public ICollection<OrderDetail>? OrderDetailList { get; set; }
-        
+
+        public ICollection<FixHistoryService>? FixHistoryServices { get; set; }
+
+        public int? RequestID { get; set; }
         public Request? Request { get; set; }
+
+        public int? ModelID { get; set; }
         public ConditionerModel? Model { get; set; }
     }
 }

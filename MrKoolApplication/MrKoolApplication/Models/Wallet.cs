@@ -2,9 +2,10 @@
 {
     public class Wallet
     {
-        public long WalletID { get; set; }
+        public int WalletID { get; set; }
         public long Balance { get; set; }
         public bool Status { get; set; }
+        public bool IsDeleted { get; set; }
 
         // Relationships
         /*public int ManagerID {  get; set; }

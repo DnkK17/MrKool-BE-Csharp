@@ -11,6 +11,7 @@ namespace MrKool.Models
         public string City { get; set; }    
 
         public bool Status { get; set; }
+        public bool? IsDeleted { get; set; }
         // Relationship
         public ICollection<Customer>? CustomerList { get; set; }
         public List<Station>? StationList { get; set; }

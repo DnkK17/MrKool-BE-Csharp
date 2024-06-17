@@ -1,4 +1,6 @@
-﻿namespace MrKool.Models
+﻿using MrKoolApplication.Models;
+
+namespace MrKool.Models
 {
     public class FixHistory
     {
@@ -9,6 +11,7 @@
         public string Description { get; set; }
 
         public bool Status { get; set; }
+        public bool IsDeleted { get; set; }
 
         // Relationships
         public int? TechnicianID {  get; set; }
@@ -18,8 +21,7 @@
 
         public Customer? Customer { get; set; }
 
-        public int? ServiceID { get; set; }
 
-        public Service? Service { get; set; }
+        public ICollection<FixHistoryService>? FixHistoryServices { get; set; }
     }
 }

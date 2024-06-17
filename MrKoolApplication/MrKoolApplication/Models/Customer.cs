@@ -14,10 +14,13 @@ namespace MrKool.Models
         public bool Gender { get; set; }
 
         public bool Status { get; set; }
+        public bool IsDeleted { get; set; }
 
         // Relationship
         public Guid userID { get; set; }
         public Users user { get; set; }
+
+        public int? AreaID   { get; set; }
         public Area? Area { get; set; }
 
         public virtual ICollection<Order>? OrderList { get; set; }

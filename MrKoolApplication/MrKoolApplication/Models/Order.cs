@@ -1,4 +1,6 @@
-﻿namespace MrKool.Models
+﻿using MrKoolApplication.Enum;
+
+namespace MrKool.Models
 {
     public class Order
     {
@@ -9,12 +11,16 @@
         public string Detail { get; set; }
         public string Address { get; set; }
 
-        public bool Status { get; set; }
+        public Status Status { get; set; }
 
+        public bool IsDeleted { get; set; }
         // Relationships
         public ICollection<OrderDetail>? OrderDetailList { get; set; }
 
-        public List<Request>? RequestList { get; set; }
+        public int RequestID { get; set; }
+        public Request Request { get; set; }
+
+        public int? CustomerID { get; set; }
         public Customer? Customer { get; set; }
 
         /*public Request Request { get; set; }*/

@@ -18,8 +18,10 @@
         public string Address { get; set; }
         public string CustomerName { get; set; }
 
-        public int ServiceID { get; set; }
+        public List<int> ServiceIDs { get; set; }
 
-        public string ServiceTitle { get; set; }
+        public List<ServiceDTO> Services { get; set; }
+
+
     }
 }
