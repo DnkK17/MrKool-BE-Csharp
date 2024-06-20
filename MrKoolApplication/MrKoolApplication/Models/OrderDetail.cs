@@ -9,18 +9,21 @@
 
 
         // Relationships
-        public int OrderID { get; set; }
+        public int? OrderID { get; set; }
 
-        public Order Order { get; set; }
+        public Order? Order { get; set; }
 
-        public int TechnicianID;
+        public int? TechnicianID;
 
-        public Technician Technician { get; set; }
+        public Technician? Technician { get; set; }
 
-        public int ServiceID { get; set; }
+        public int? ServiceID { get; set; }
 
-        public Service Service { get; set; }
+        public Service? Service { get; set; }
 
+        public int? FixHistoryID { get; set; }
+
+        public FixHistory? FixHistory { get; set; }
 
     }
 }

@@ -33,9 +33,6 @@ namespace MrKoolApplication.Controllers
             {
                 if(computedHash[i] != user.HashPassword[i]) return Unauthorized();
             }
-            
-           
-
             return new AuthDTO
             {
                 Token = _tokenRepository.CreateToken(user),

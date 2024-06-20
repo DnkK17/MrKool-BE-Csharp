@@ -6,6 +6,7 @@
         public string Title { get; set; }
         public double Price { get; set; }
 
+        public string image { get; set; }
         public bool Status { get; set; }
         public bool IsDeleted { get; set; }
         // Relationship

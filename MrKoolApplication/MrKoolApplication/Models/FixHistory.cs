@@ -22,6 +22,6 @@ namespace MrKool.Models
         public Customer? Customer { get; set; }
 
 
-        public ICollection<FixHistoryService>? FixHistoryServices { get; set; }
+        public ICollection<OrderDetail>? OrderDetailList { get; set; }
     }
 }

@@ -53,6 +53,7 @@ builder.Services.AddScoped<IModelRepository, ModelRepository>();
 builder.Services.AddScoped<IManagerRepository, ManagerRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<ITechnicianRepository, TechnicianRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

@@ -73,16 +73,17 @@ namespace MrKoolApplication.Controllers
             return CreatedAtAction(nameof(GetRequestById), new { id = request.RequestID }, request);
         }
 
-        [HttpPut("{id}/approve/manager")]
-        public IActionResult ApproveRequestByManager(int id)
+        [HttpPut("/approve/manager/{requestID}/{technicianID}")]
+        public IActionResult ApproveRequestByManager(int requestID,int technicianID)
         {
-            var request = _context.Requests.Find(id);
+            var request = _context.Requests.Find(requestID);
             if (request == null)
             {
                 return NotFound();
             }
             // Assuming we have logic to ensure only a manager can approve here
             request.Status = Enum.Status.Approved; // Approved by Manager
+            request.TechnicianID = technicianID; //Assign 1 technician
             _context.SaveChanges();
             return NoContent();
         }
@@ -105,8 +106,25 @@ namespace MrKoolApplication.Controllers
                 Title = request.Description,
                 Address = request.RequestAddress,
                 Status = Enum.Status.Processing, // Or some initial status
-                Customer = request.Customer
+                Customer = request.Customer,
+                CustomerID = request.CustomerID, 
+                OrderDetailList = new List<OrderDetail>()
             };
+
+            foreach (var service in request.Services)
+            {
+                OrderDetail orderDetail = new OrderDetail
+                {
+                    Image = "", 
+                    Status = true, 
+                    IsDeleted = false,
+                    OrderID = order.OrderID,
+                    TechnicianID = request.TechnicianID,
+                    ServiceID = service.ServiceID,
+                };
+
+                order.OrderDetailList.Add(orderDetail);
+            }
             _context.Orders.Add(order);
             _context.SaveChanges();
 
@@ -123,7 +141,7 @@ namespace MrKoolApplication.Controllers
 
             if (!_requestRepository.UpdateRequest(requestMap))
             {
-                ModelState.AddModelError("", "Something went wrong while update category");
+                ModelState.AddModelError("", "Something went wrong while update");
                 return StatusCode(500, ModelState);
             }
 

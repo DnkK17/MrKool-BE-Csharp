@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MrKoolApplication.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class updateAPI : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -36,6 +36,7 @@ namespace MrKoolApplication.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
+                    image = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<bool>(type: "bit", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -189,38 +190,6 @@ namespace MrKoolApplication.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Orders",
-                columns: table => new
-                {
-                    OrderID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Date = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Time = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Detail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    RequestID = table.Column<int>(type: "int", nullable: false),
-                    CustomerID = table.Column<int>(type: "int", nullable: true),
-                    TransactionID = table.Column<long>(type: "bigint", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Orders", x => x.OrderID);
-                    table.ForeignKey(
-                        name: "FK_Orders_Customers_CustomerID",
-                        column: x => x.CustomerID,
-                        principalTable: "Customers",
-                        principalColumn: "CustomerID");
-                    table.ForeignKey(
-                        name: "FK_Orders_Transactions_TransactionID",
-                        column: x => x.TransactionID,
-                        principalTable: "Transactions",
-                        principalColumn: "TransactionID");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Technicians",
                 columns: table => new
                 {
@@ -294,6 +263,44 @@ namespace MrKoolApplication.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    OrderID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Time = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Detail = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    TechnicianID = table.Column<int>(type: "int", nullable: true),
+                    RequestID = table.Column<int>(type: "int", nullable: true),
+                    CustomerID = table.Column<int>(type: "int", nullable: true),
+                    TransactionID = table.Column<long>(type: "bigint", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.OrderID);
+                    table.ForeignKey(
+                        name: "FK_Orders_Customers_CustomerID",
+                        column: x => x.CustomerID,
+                        principalTable: "Customers",
+                        principalColumn: "CustomerID");
+                    table.ForeignKey(
+                        name: "FK_Orders_Technicians_TechnicianID",
+                        column: x => x.TechnicianID,
+                        principalTable: "Technicians",
+                        principalColumn: "TechnicianID");
+                    table.ForeignKey(
+                        name: "FK_Orders_Transactions_TransactionID",
+                        column: x => x.TransactionID,
+                        principalTable: "Transactions",
+                        principalColumn: "TransactionID");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Requests",
                 columns: table => new
                 {
@@ -353,6 +360,7 @@ namespace MrKoolApplication.Migrations
                     ServiceID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ServiceTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    image = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Date = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -377,31 +385,6 @@ namespace MrKoolApplication.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FixHistoryService",
-                columns: table => new
-                {
-                    FixHistoryID = table.Column<int>(type: "int", nullable: false),
-                    ServiceID = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FixHistoryService", x => new { x.FixHistoryID, x.ServiceID });
-                    table.ForeignKey(
-                        name: "FK_FixHistoryService_FixHistories_FixHistoryID",
-                        column: x => x.FixHistoryID,
-                        principalTable: "FixHistories",
-                        principalColumn: "FixHistoryID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_FixHistoryService_Services_ServiceID",
-                        column: x => x.ServiceID,
-                        principalTable: "Services",
-                        principalColumn: "ServiceID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "OrderDetails",
                 columns: table => new
                 {
@@ -410,11 +393,17 @@ namespace MrKoolApplication.Migrations
                     TechnicianID = table.Column<int>(type: "int", nullable: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<bool>(type: "bit", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    FixHistoryID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OrderDetails", x => new { x.OrderID, x.TechnicianID, x.ServiceID });
+                    table.ForeignKey(
+                        name: "FK_OrderDetails_FixHistories_FixHistoryID",
+                        column: x => x.FixHistoryID,
+                        principalTable: "FixHistories",
+                        principalColumn: "FixHistoryID");
                     table.ForeignKey(
                         name: "FK_OrderDetails_Orders_OrderID",
                         column: x => x.OrderID,
@@ -455,11 +444,6 @@ namespace MrKoolApplication.Migrations
                 column: "TechnicianID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FixHistoryService_ServiceID",
-                table: "FixHistoryService",
-                column: "ServiceID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Managers_userID",
                 table: "Managers",
                 column: "userID",
@@ -471,6 +455,11 @@ namespace MrKoolApplication.Migrations
                 column: "WalletID",
                 unique: true,
                 filter: "[WalletID] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderDetails_FixHistoryID",
+                table: "OrderDetails",
+                column: "FixHistoryID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderDetails_ServiceID",
@@ -486,6 +475,11 @@ namespace MrKoolApplication.Migrations
                 name: "IX_Orders_CustomerID",
                 table: "Orders",
                 column: "CustomerID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_TechnicianID",
+                table: "Orders",
+                column: "TechnicianID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_TransactionID",
@@ -576,9 +570,6 @@ namespace MrKoolApplication.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "FixHistoryService");
-
-            migrationBuilder.DropTable(
                 name: "OrderDetails");
 
             migrationBuilder.DropTable(
@@ -597,10 +588,10 @@ namespace MrKoolApplication.Migrations
                 name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "Technicians");
+                name: "Customers");
 
             migrationBuilder.DropTable(
-                name: "Customers");
+                name: "Technicians");
 
             migrationBuilder.DropTable(
                 name: "Transactions");

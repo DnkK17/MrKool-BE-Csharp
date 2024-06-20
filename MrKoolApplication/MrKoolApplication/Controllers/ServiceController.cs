@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MrKool.Interface;
 using MrKool.Models;
+using MrKoolApplication.DTO;
 using MrKoolApplication.Interface;
 
 namespace MrKoolApplication.Controllers
@@ -19,31 +20,36 @@ namespace MrKoolApplication.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Area>))]
-        public async Task<ActionResult<IEnumerable<Service>>> GetActionResultAsync()
+        [ProducesResponseType(200, Type = typeof(IEnumerable<ServiceDTO>))]
+        public async Task<ActionResult<IEnumerable<ServiceDTO>>> GetActionResultAsync()
         {
             {
                 var services = await _serviceRepository.GetAllAsync();
-                var serviceDTOs = _mapper.Map<IEnumerable<Service>>(services);
+                var serviceDTOs = _mapper.Map<IEnumerable<ServiceDTO>>(services);
                 return Ok(serviceDTOs);
             }
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<Service> GetAreaById(int id)
+        [HttpGet("/Service/{id}")]
+        public ActionResult<ServiceDTO> GetServiceById(int id)
         {
             var service = _serviceRepository.GetById(id);
             if (service == null)
             {
                 return NotFound();
             }
-            return service;
+            var serviceDTO = _mapper.Map<ServiceDTO>(service);
+            return serviceDTO;
         }
 
         [HttpGet("search/{keyword}")]
-        public ActionResult<IEnumerable<Service>> SearchAreas(string keyword)
+        public ActionResult<IEnumerable<ServiceDTO>> SearchServices(string keyword)
         {
-            return _serviceRepository.GetByModel(keyword);
+            var serviceSearch = _serviceRepository.GetByModel(keyword);
+            if (serviceSearch == null) return NotFound();
+            var serviceSearchDTO = new List<ServiceDTO> { _mapper.Map<ServiceDTO>(serviceSearch) };
+
+            return Ok(serviceSearchDTO);
         }
 
 

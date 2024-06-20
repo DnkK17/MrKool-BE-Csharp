@@ -10,10 +10,11 @@ namespace MrKool.Models
         public string RequestAddress { get; set; }
         public Status Status { get; set; }
 
+
         public bool IsDeleted { get; set; }
 
         // Relationships
-        public int AreaID   { get; set; }
+        public int AreaID { get; set; }
         public Area Area { get; set; }
 
         public int CustomerID { get; set; }
@@ -29,5 +30,7 @@ namespace MrKool.Models
         public Order? Order { get; set; }
         public int? TechnicianID { get; set; }
         public Technician? Technician { get; set; }
+
+        public double? TotalPrice => Services.Sum(service => service.Price) ;
     }
 }

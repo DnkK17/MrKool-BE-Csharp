@@ -24,7 +24,7 @@ namespace MrKoolApplication.Help
             CreateMap<FixHistory, FixHistoryDTO>();
             CreateMap<Order, OrderDTO>();
             CreateMap<OrderDetail, OrderDetailDTO>();
-            CreateMap<FixHistoryService, FixHistoryServiceDTO>();
+  
         }
     }
 }

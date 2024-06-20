@@ -25,7 +25,6 @@ namespace MrKool.Data
         public DbSet<Technician> Technicians { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Wallet> Wallets { get; set; }
-        public DbSet<FixHistoryService> FixHistoryServices { get; set; }
         public DbSet<Users> Users { get; set; }
 
 
@@ -143,21 +142,6 @@ namespace MrKool.Data
                 .HasForeignKey(fh => fh.CustomerID)
                 .OnDelete(DeleteBehavior.NoAction); // or Cascade based on your needs
 
-            modelBuilder.Entity<FixHistoryService>()
-              .HasKey(fs => new { fs.FixHistoryID, fs.ServiceID });
-
-            modelBuilder.Entity<FixHistoryService>()
-                .HasOne(fs => fs.FixHistory)
-                .WithMany(fh => fh.FixHistoryServices)
-                .HasForeignKey(fs => fs.FixHistoryID);
-
-            modelBuilder.Entity<FixHistoryService>()
-                .HasOne(fs => fs.Service)
-                .WithMany(s => s.FixHistoryServices)
-                .HasForeignKey(fs => fs.ServiceID);
-
-            // Optional: Define table name for the join table
-            modelBuilder.Entity<FixHistoryService>().ToTable("FixHistoryService");
 
             // Customer - Users (one-to-one)
             modelBuilder.Entity<Customer>()

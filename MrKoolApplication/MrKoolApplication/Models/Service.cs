@@ -7,6 +7,7 @@ namespace MrKool.Models
     {
         public int ServiceID { get; set; }
         public string ServiceTitle { get; set; }
+        public string image {  get; set; }
         public string Date { get; set; }
         public double Price { get; set; }
         public string Description { get; set; }
@@ -17,7 +18,6 @@ namespace MrKool.Models
         // Relationships
         public ICollection<OrderDetail>? OrderDetailList { get; set; }
 
-        public ICollection<FixHistoryService>? FixHistoryServices { get; set; }
 
         public int? RequestID { get; set; }
         public Request? Request { get; set; }
