@@ -10,6 +10,7 @@ namespace MrKoolApplication.Interface
 
         List<Manager> GetManagers();
 
+        List<Manager> GetManagersByName(string keyword);
         bool ManagerExist(int managerID);
         bool UpdateManager(Manager manager);
 

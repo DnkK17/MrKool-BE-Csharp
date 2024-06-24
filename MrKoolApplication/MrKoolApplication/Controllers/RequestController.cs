@@ -65,7 +65,7 @@ namespace MrKoolApplication.Controllers
             request.Station = station;
             request.Customer = customer;
             request.Services = services;
-            request.Status = Enum.Status.Pending; // Pending status
+            request.Status = Enum.Status.Pending; 
 
             _requestRepository.CreateRequest(request);
             _requestRepository.Save();
@@ -81,9 +81,9 @@ namespace MrKoolApplication.Controllers
             {
                 return NotFound();
             }
-            // Assuming we have logic to ensure only a manager can approve here
-            request.Status = Enum.Status.Approved; // Approved by Manager
-            request.TechnicianID = technicianID; //Assign 1 technician
+            
+            request.Status = Enum.Status.Approved; 
+            request.TechnicianID = technicianID; 
             _context.SaveChanges();
             return NoContent();
         }
@@ -96,8 +96,8 @@ namespace MrKoolApplication.Controllers
             {
                 return NotFound();
             }
-            // Assuming we have logic to ensure only a technician can approve here
-            request.Status = Enum.Status.Approved; // Approved by Technician
+
+            request.Status = Enum.Status.Approved;
 
             // Create a new order
             var order = new Order
@@ -105,7 +105,7 @@ namespace MrKoolApplication.Controllers
                 Date = request.Date,
                 Title = request.Description,
                 Address = request.RequestAddress,
-                Status = Enum.Status.Processing, // Or some initial status
+                Status = Enum.Status.Processing, 
                 Customer = request.Customer,
                 CustomerID = request.CustomerID, 
                 OrderDetailList = new List<OrderDetail>()

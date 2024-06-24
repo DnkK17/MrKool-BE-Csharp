@@ -671,7 +671,8 @@ namespace MrKoolApplication.Migrations
                 {
                     b.HasOne("MrKool.Models.FixHistory", "FixHistory")
                         .WithMany("OrderDetailList")
-                        .HasForeignKey("FixHistoryID");
+                        .HasForeignKey("FixHistoryID")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("MrKool.Models.Order", "Order")
                         .WithMany("OrderDetailList")

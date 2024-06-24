@@ -73,14 +73,14 @@ namespace MrKool.Data
                 .HasOne(t => t.Manager)
                 .WithMany(m => m.TechnicianList)
                 .HasForeignKey(t => t.ManagerID)
-                .OnDelete(DeleteBehavior.NoAction); // or Cascade based on your needs
+                .OnDelete(DeleteBehavior.NoAction); 
 
             // Technician - Station (many-to-one)
             modelBuilder.Entity<Technician>()
                 .HasOne(t => t.Station)
                 .WithMany(s => s.TechnicianList)
                 .HasForeignKey(t => t.StationID)
-                .OnDelete(DeleteBehavior.NoAction); // or Cascade based on your needs
+                .OnDelete(DeleteBehavior.NoAction); 
 
             // Wallet - Technician (one-to-one)
             modelBuilder.Entity<Technician>()
@@ -105,43 +105,49 @@ namespace MrKool.Data
                 .HasOne(s => s.Area)
                 .WithMany(a => a.StationList)
                 .HasForeignKey(s => s.AreaID)
-                .OnDelete(DeleteBehavior.NoAction); // or Cascade based on your needs
+                .OnDelete(DeleteBehavior.NoAction); 
 
             // Order - Customer (many-to-one)
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.Customer)
                 .WithMany(c => c.OrderList)
                 .HasForeignKey(o => o.CustomerID)
-                .OnDelete(DeleteBehavior.NoAction); // or Cascade based on your needs
+                .OnDelete(DeleteBehavior.NoAction); 
 
             // OrderDetail - Order (many-to-one)
             modelBuilder.Entity<OrderDetail>()
                 .HasOne(od => od.Order)
                 .WithMany(o => o.OrderDetailList)
                 .HasForeignKey(od => od.OrderID)
-                .OnDelete(DeleteBehavior.NoAction); // Example: Cascade delete
+                .OnDelete(DeleteBehavior.NoAction); 
 
             // Service - OrderDetail (many-to-one)
             modelBuilder.Entity<OrderDetail>()
                 .HasOne(od => od.Service)
                 .WithMany(s => s.OrderDetailList)
                 .HasForeignKey(od => od.ServiceID)
-                .OnDelete(DeleteBehavior.NoAction); // or Cascade based on your needs
+                .OnDelete(DeleteBehavior.NoAction);
+            
+            //FixHistory - OrderDetail (many-to-one)
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne(f => f.FixHistory)
+                .WithMany(o => o.OrderDetailList)
+                .HasForeignKey(od => od.FixHistoryID)
+                .OnDelete(DeleteBehavior.NoAction);
 
             // FixHistory - Technician (many-to-one)
             modelBuilder.Entity<FixHistory>()
                 .HasOne(fh => fh.Technician)
                 .WithMany(t => t.FixHistoryList)
                 .HasForeignKey(fh => fh.TechnicianID)
-                .OnDelete(DeleteBehavior.NoAction); // or Cascade based on your needs
+                .OnDelete(DeleteBehavior.NoAction); 
 
             // FixHistory - Customer (many-to-one)
             modelBuilder.Entity<FixHistory>()
                 .HasOne(fh => fh.Customer)
                 .WithMany(c => c.FixHistoryList)
                 .HasForeignKey(fh => fh.CustomerID)
-                .OnDelete(DeleteBehavior.NoAction); // or Cascade based on your needs
-
+                .OnDelete(DeleteBehavior.NoAction); 
 
             // Customer - Users (one-to-one)
             modelBuilder.Entity<Customer>()
@@ -154,50 +160,50 @@ namespace MrKool.Data
                 .HasOne(c => c.Area)
                 .WithMany(a => a.CustomerList)
                 .HasForeignKey(c => c.AreaID)
-                .OnDelete(DeleteBehavior.NoAction); // or Cascade based on your needs
+                .OnDelete(DeleteBehavior.NoAction); 
 
             // Area - Station (one-to-many)
             modelBuilder.Entity<Station>()
                 .HasOne(s => s.Area)
                 .WithMany(a => a.StationList)
                 .HasForeignKey(s => s.AreaID)
-                .OnDelete(DeleteBehavior.NoAction); // or Cascade based on your needs
+                .OnDelete(DeleteBehavior.NoAction); 
 
             // Request - Area (many-to-one)
             modelBuilder.Entity<Request>()
                 .HasOne(r => r.Area)
                 .WithMany(a => a.RequestList)
                 .HasForeignKey(r => r.AreaID)
-                .OnDelete(DeleteBehavior.NoAction); // or Cascade based on your needs
+                .OnDelete(DeleteBehavior.NoAction); 
 
             // Request - Customer (many-to-one)
             modelBuilder.Entity<Request>()
                 .HasOne(r => r.Customer)
                 .WithMany(c => c.RequestList)
                 .HasForeignKey(r => r.CustomerID)
-                .OnDelete(DeleteBehavior.NoAction); // or Cascade based on your needs
+                .OnDelete(DeleteBehavior.NoAction); 
 
             // Request - Station (many-to-one)
             modelBuilder.Entity<Request>()
                 .HasOne(r => r.Station)
                 .WithMany(s => s.RequestList)
                 .HasForeignKey(r => r.StationID)
-                .OnDelete(DeleteBehavior.NoAction); // or Cascade based on your needs
+                .OnDelete(DeleteBehavior.NoAction);
 
             // Request - Manager (many-to-one)
             modelBuilder.Entity<Request>()
                 .HasOne(r => r.Manager)
                 .WithMany(m => m.RequestList)
                 .HasForeignKey(r => r.ManagerID)
-                .OnDelete(DeleteBehavior.NoAction); // or Cascade based on your needs
+                .OnDelete(DeleteBehavior.NoAction);
 
             // Order - Request (one-to-one)
             modelBuilder.Entity<Order>()
-                .HasOne(o => o.Request)           // Order entity has one Request
-                .WithOne(r => r.Order)            // Request entity has one Order
-                .HasForeignKey<Request>(r => r.OrderID) // Foreign key on Request pointing to OrderID
-                .IsRequired()                     // Request must have a corresponding Order
-                .OnDelete(DeleteBehavior.NoAction); // Cascade delete if needed
+                .HasOne(o => o.Request)           
+                .WithOne(r => r.Order)            
+                .HasForeignKey<Request>(r => r.OrderID) 
+                .IsRequired()                    
+                .OnDelete(DeleteBehavior.NoAction); 
 
 
             // ConditionerModel - Service (one-to-many)
@@ -205,16 +211,16 @@ namespace MrKool.Data
                 .HasMany(cm => cm.ServiceList)
                 .WithOne(s => s.Model)
                 .HasForeignKey(s => s.ModelID)
-                .OnDelete(DeleteBehavior.NoAction); // or Cascade based on your needs
+                .OnDelete(DeleteBehavior.NoAction); 
 
             // Area - Customer (one-to-many)
             modelBuilder.Entity<Area>()
                 .HasMany(a => a.CustomerList)
                 .WithOne(c => c.Area)
                 .HasForeignKey(c => c.AreaID)
-                .OnDelete(DeleteBehavior.NoAction); // or Cascade based on your needs
+                .OnDelete(DeleteBehavior.NoAction); 
 
-            // Additional configurations as needed
+            
 
         }
     }

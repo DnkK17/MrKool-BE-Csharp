@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MrKool.Interface;
 using MrKool.Models;
+using MrKoolApplication.DTO;
 using MrKoolApplication.Interface;
 
 namespace MrKoolApplication.Controllers
@@ -20,25 +21,33 @@ namespace MrKoolApplication.Controllers
 
 
         [HttpGet("{id}")]
-        public ActionResult<Manager> GetManagerById(int id)
+        public ActionResult<ManagerDTO> GetManagerById(int id)
         {
             var manager = _managerRepository.GetById(id);
             if (manager == null)
             {
                 return NotFound();
             }
-            return manager;
+            var managerDTO = _mapper.Map<ManagerDTO>(manager);
+            return managerDTO;
         }
 
-   
-
+        [HttpGet]
+        [Route("/Managers/search/{ManagerName}")]
+        public ActionResult<IEnumerable<ManagerDTO>> GetManagerByName(string keyword)
+        {
+            var managers = _managerRepository.GetManagersByName(keyword);
+            var managerDTO = _mapper.Map<IEnumerable<ManagerDTO>>(managers);
+            return Ok(managerDTO);
+        }
+         
 
         //CRUD
 
         [HttpPost("/CreateManager")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateManager([FromBody] Manager managerCreate)
+        public IActionResult CreateManager([FromBody] ManagerDTO managerCreate)
         {
             if (managerCreate == null) return BadRequest();
             var manager = _managerRepository.GetManagers().Where(c => c.Email == managerCreate.Email);
@@ -54,7 +63,7 @@ namespace MrKoolApplication.Controllers
         }
 
         [HttpPut("/UpdateManager/{managerID}")]
-        public IActionResult UpdateManager(int managerID, [FromBody] Manager managerUpdate)
+        public IActionResult UpdateManager(int managerID, [FromBody] ManagerDTO managerUpdate)
         {
             if (managerUpdate == null) return BadRequest();
             if (managerID != managerUpdate.ManagerID) return BadRequest();

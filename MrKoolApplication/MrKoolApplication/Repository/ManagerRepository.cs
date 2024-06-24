@@ -29,6 +29,11 @@ namespace MrKoolApplication.Repository
             return _context.Set<Manager>().SingleOrDefault(a => a.ManagerID == managerID);
         }
 
+        public List<Manager> GetManagersByName(string keyword)
+        {
+            return _context.Managers.Where(a => a.ManagerName.Contains(keyword)).ToList();
+        }
+
         public List<Manager> GetManagers()
         {
             return _context.Managers.ToList();

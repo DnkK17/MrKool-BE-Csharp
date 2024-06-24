@@ -15,10 +15,8 @@ namespace MrKoolApplication.DTO
 
         public int CustomerID { get; set; }
 
-        public Customer CustomerName { get; set; }
+        public string CustomerName { get; set; }
 
-        public int ServiceID { get; set; }
-
-        public Service ServiceTitle { get; set; }
+        public List<ServiceDTO> Services { get; set; }
     }
 }

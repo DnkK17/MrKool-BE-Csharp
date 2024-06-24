@@ -36,6 +36,7 @@ namespace MrKool.Controllers
         public async Task<ActionResult<IEnumerable<OrderDTO>>> GetOrders()
         {
             var orders = await _orderRepository.GetAllOrdersAsync();
+            if (orders == null) return NoContent();
             var orderDTOs = _mapper.Map<IEnumerable<OrderDTO>>(orders);
             return Ok(orderDTOs);
         }
@@ -59,6 +60,7 @@ namespace MrKool.Controllers
         public ActionResult<IEnumerable<OrderDTO>> SearchOrders(string keyword)
         {
             var orders = _orderRepository.GetByTitleContaining(keyword);
+            if (orders == null) return NoContent();
             var orderDTOs = _mapper.Map<IEnumerable<OrderDTO>>(orders);
             return Ok(orderDTOs);
         }

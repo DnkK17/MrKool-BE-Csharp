@@ -12,8 +12,8 @@ using MrKool.Data;
 namespace MrKoolApplication.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20240620035737_updateAPI")]
-    partial class updateAPI
+    [Migration("20240623031521_update")]
+    partial class update
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -674,7 +674,8 @@ namespace MrKoolApplication.Migrations
                 {
                     b.HasOne("MrKool.Models.FixHistory", "FixHistory")
                         .WithMany("OrderDetailList")
-                        .HasForeignKey("FixHistoryID");
+                        .HasForeignKey("FixHistoryID")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("MrKool.Models.Order", "Order")
                         .WithMany("OrderDetailList")
