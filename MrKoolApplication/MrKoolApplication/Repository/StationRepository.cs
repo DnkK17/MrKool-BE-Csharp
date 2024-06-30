@@ -19,10 +19,13 @@ namespace MrKool.Repository
         {
             _context = context;
         }
-
-        public Station GetById(int stationID)
+        public List<Station> GetStations()
         {
-            return _context.Set<Station>().SingleOrDefault(a => a.StationID == stationID);
+            return _context.Stations.ToList();
+        }
+        public async Task<Station> GetById(int stationID)
+        {
+            return await _context.Stations.FirstOrDefaultAsync(a => a.StationID == stationID);
         }
 
         public List<Station> GetAll()
@@ -34,5 +37,34 @@ namespace MrKool.Repository
         {
             return _context.Set<Station>().Where(a => a.Address.Contains(name)).ToList();
         }
+        //CRUD
+        public bool StationExist(int StationID)
+        {
+            return _context.Set<Station>().Any(a => a.StationID == StationID);
+        }
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
+        }
+
+        public bool CreateStation(Station Station)
+        {
+            _context.Add(Station);
+            return Save();
+        }
+
+        public bool UpdateStation(Station Station)
+        {
+            _context.Update(Station);
+            return Save();
+        }
+
+        public async Task DeleteStationAsync(Station Station)
+        {
+            _context.Stations.Remove(Station);
+            await _context.SaveChangesAsync();
+        }
     }
 }
+

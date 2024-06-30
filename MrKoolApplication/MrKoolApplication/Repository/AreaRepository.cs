@@ -60,7 +60,7 @@ namespace MrKool.Repository
             if (area != null)
             {
                 var station = _mapper.Map<Station>(stationDto);
-                station.Area.AreaID = areaId;
+                station.AreaID = areaId;
                 _context.Stations.Add(station);
             }
         }

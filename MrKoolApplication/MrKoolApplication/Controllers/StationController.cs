@@ -24,7 +24,7 @@ namespace MrKool.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Station>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<StationDTO>))]
         public ActionResult GetAllStations()
         {
             var stations = _mapper.Map<List<StationDTO>>(_stationRepository.GetAll());
@@ -36,14 +36,15 @@ namespace MrKool.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Station> GetAreaById(int id)
+        public async Task<ActionResult<StationDTO>> GetStationById(int id)
         {
-            var stations = _stationRepository.GetById(id);
+            var stations = await _stationRepository.GetById(id);
             if (stations == null)
             {
                 return NotFound();
             }
-            return stations;
+            var stationDTOs = _mapper.Map<StationDTO>(stations);
+            return Ok(stationDTOs);
         }
 
         [HttpGet("search/{keyword}")]
@@ -51,6 +52,58 @@ namespace MrKool.Controllers
         {
             return _stationRepository.GetByNameContaining(keyword);
         }
+        [HttpPost]
+        [Route("CreateStation")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateStation([FromBody] StationDTO stationCreate)
+        {
+            if (stationCreate == null) return BadRequest();
 
+            var station = _stationRepository.GetStations().FirstOrDefault(c => c.Address == stationCreate.Address);
+            if (station != null)
+            {
+                return BadRequest("Station with the same title already exists.");
+            }
+
+            var stationMap = _mapper.Map<Station>(stationCreate);
+            if (!_stationRepository.CreateStation(stationMap))
+            {
+                return StatusCode(500, "A problem happened while handling your request.");
+            }
+
+            return Ok("Successfully created the station.");
+        }
+
+        [HttpPut]
+        [Route("UpdateStation/{stationID}")]
+        public IActionResult UpdateStation(int stationID, [FromBody] StationDTO stationUpdate)
+        {
+            if (stationUpdate == null) return BadRequest();
+            if (stationID != stationUpdate.StationID) return BadRequest();
+            if (!_stationRepository.StationExist(stationID)) return BadRequest();
+
+            var stationMap = _mapper.Map<Station>(stationUpdate);
+            if (!_stationRepository.UpdateStation(stationMap))
+            {
+                return StatusCode(500, "A problem happened while handling your request.");
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete]
+        [Route("DeleteStation/{id}")]
+        public async Task<IActionResult> DeleteStationAsync(int id)
+        {
+            var station = await _stationRepository.GetById(id);
+            if (station == null)
+            {
+                return NotFound();
+            }
+
+            station.IsDeleted = false;
+            return NoContent();
+        }
     }
 }

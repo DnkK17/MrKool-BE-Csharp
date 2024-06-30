@@ -40,7 +40,7 @@ namespace MrKoolApplication.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<AuthDTO>> Register(RegisterDTO registerDto, string roleName)
+        public async Task<ActionResult<AuthDTO>> Register(RegisterDTO registerDto)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
@@ -52,12 +52,12 @@ namespace MrKoolApplication.Controllers
                     Email = registerDto.Email.ToLower(),
                     HashPassword = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
                     SaltPassword = hmac.Key,
-                    RoleName = roleName.ToLower(),
+                    RoleName = registerDto.roleName.ToLower(),
                 };
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
 
-                if (roleName.ToLower() == "customer")
+                if (registerDto.roleName.ToLower() == "customer")
                 {
                     var newCustomer = new Customer
                     {
@@ -71,7 +71,7 @@ namespace MrKoolApplication.Controllers
                     _context.Customers.Add(newCustomer);
                     await _context.SaveChangesAsync();
                 }
-                else if (roleName.ToLower() == "technician")
+                else if (registerDto.roleName.ToLower() == "technician")
                 {
                     var newTechnician = new Technician
                     {

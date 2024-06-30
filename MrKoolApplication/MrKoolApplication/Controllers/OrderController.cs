@@ -73,7 +73,7 @@ namespace MrKool.Controllers
             if (order == null) return NotFound();
             order.Status = Status.Approved;
             _context.SaveChanges();
-
+            double? totalPrice = order.Request.TotalPrice;
             var newFixHistory = new FixHistory
             {
                 CustomerID = order.CustomerID,
@@ -81,7 +81,15 @@ namespace MrKool.Controllers
                 TechnicianID = order.TechnicianID,
                 OrderDetailList = order.OrderDetailList,
             };
+            var newTransaction = new Transaction
+            {
+                Amount = (long)totalPrice,
+                Date = DateTime.Now,
+                Status = true,
+                WalletID = order.Technician.WalletID ?? throw new Exception()
+            };
             _context.FixHistories.Add(newFixHistory);
+            _context.Transactions.Add(newTransaction);
             _context.SaveChanges();
             return NoContent();
         }

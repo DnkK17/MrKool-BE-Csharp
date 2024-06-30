@@ -98,7 +98,7 @@ namespace MrKool.Controllers
 
         [HttpPut]
         [Route("UpdateArea/{areaID}")]
-        public IActionResult UpdateArea(int areaID, [FromBody] Area areaUpdate)
+        public IActionResult UpdateArea(int areaID, [FromBody] AreaDTO areaUpdate)
         {
             if (areaUpdate == null) return BadRequest();
             if (areaID != areaUpdate.AreaID) return BadRequest();
