@@ -1,0 +1,61 @@
+version: '2.18.1'
+
+services:
+  # web:
+  #   image: mrkool
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "159.223.68.94:8081:90"
+  #   depends_on:
+  #     - db
+
+  # MrKoolApplication
+  web:
+    networks:
+      - mrkool
+    image: backend/mrkool-application:latest
+    build:
+      context: .
+      dockerfile: MrKoolApplication/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:8080
+      - DB_HOST=159.223.68.94  
+      - DB_PORT=1433
+      - DB_USER=sa
+      - DB_PASSWORD=sa@DangNgocKhoi312
+      - DB_NAME=MrKool 
+    ports:
+      - 7001:8080
+    depends_on:
+      - mssql
+  
+  mssql:
+    # container_name: mssql-db
+    # hostname: mssql-db
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: 'Y'
+      SA_PASSWORD: 'sa@DangNgocKhoi312'
+    ports: 
+      - 1433:1433
+    volumes:
+      - ./data:/var/opt/mssql/data
+
+  # db:
+  #   image: mrkool   
+  #   environment:
+  #     SA_PASSWORD: "sa@DangNgocKhoi312"
+  #     ACCEPT_EULA: "Y"
+  #   ports:
+  #     - "1433:1433"
+  #   networks:
+  #     - mynetwork
+
+networks:
+  mrkool:
+    driver: bridge
+volumes:
+  mssql:
