@@ -64,8 +64,6 @@ builder.Services.AddDbContext<DBContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("LocalDB"));
 });
-
-var app = builder.Build();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhost5173", builder =>
@@ -76,6 +74,8 @@ builder.Services.AddCors(options =>
                .WithOrigins("http://localhost:5173");
     });
 });
+var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -85,7 +85,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors("AllowLocalhost5173");
 app.UseAuthentication();
 app.UseAuthorization();
 

@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using MrKoolApplication.Models;
 using MrKool.Models;
+using Microsoft.AspNetCore.Cors;
 namespace MrKoolApplication.Controllers
 {
     [Route("api/[controller]")]
@@ -23,6 +24,7 @@ namespace MrKoolApplication.Controllers
         }
 
         [HttpPost("login")]
+        [EnableCors("AllowSpecificOrigin")]
         public async Task<ActionResult<AuthDTO>> Login(LoginDTO loginDTO)
         {
             var user = await _context.Users.SingleOrDefaultAsync(x => x.Email == loginDTO.Email );
@@ -40,6 +42,7 @@ namespace MrKoolApplication.Controllers
         }
 
         [HttpPost("register")]
+        [EnableCors("AllowSpecificOrigin")]
         public async Task<ActionResult<AuthDTO>> Register(RegisterDTO registerDto)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
@@ -82,6 +85,19 @@ namespace MrKoolApplication.Controllers
                         TechnicianName = registerDto.name
                     };
                     _context.Technicians.Add(newTechnician);
+                    await _context.SaveChangesAsync();
+                }
+                else if (registerDto.roleName.ToLower() == "manager")
+                {
+                    var newManager = new Manager
+                    {
+                        Email = registerDto.Email,
+                        Password = registerDto.Password,
+                        Telephone = registerDto.Telephone,
+                        userID = user.Id,
+                        ManagerName = registerDto.name
+                    };
+                    _context.Managers.Add(newManager);
                     await _context.SaveChangesAsync();
                 }
 

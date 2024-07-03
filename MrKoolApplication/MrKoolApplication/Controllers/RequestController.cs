@@ -97,7 +97,6 @@ namespace MrKoolApplication.Controllers
                 return NotFound();
             }
 
-            request.Status = Enum.Status.Approved;
 
             // Create a new order
             var order = new Order

@@ -9,7 +9,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0.3-jammy-amd64 AS base
     # Copy project files and restore deps
     COPY ["./MrKoolApplication.csproj", "./MrKoolApplication/"]
 RUN dotnet restore "./MrKoolApplication/MrKoolApplication.csproj" 
-
+    
     WORKDIR "/app/MrKoolApplication"
     # Copy remaining project files
     COPY . . 
