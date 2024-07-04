@@ -107,7 +107,8 @@ namespace MrKoolApplication.Controllers
                 Status = Enum.Status.Processing, 
                 Customer = request.Customer,
                 CustomerID = request.CustomerID, 
-                OrderDetailList = new List<OrderDetail>()
+                OrderDetailList = new List<OrderDetail>(),
+                TotalPrice = request.TotalPrice
             };
 
             foreach (var service in request.Services)

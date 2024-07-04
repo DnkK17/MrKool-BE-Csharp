@@ -16,7 +16,7 @@ namespace MrKool.Models
         public Guid userID { get; set; }
         public Users user { get; set; }
         
-        public int ManagerID { get; set; }
+        public int? ManagerID { get; set; }
         public Manager? Manager { get; set; }
 
         public int? StationID { get; set; }

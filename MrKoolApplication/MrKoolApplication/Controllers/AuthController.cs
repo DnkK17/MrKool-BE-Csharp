@@ -45,6 +45,12 @@ namespace MrKoolApplication.Controllers
         [EnableCors("AllowSpecificOrigin")]
         public async Task<ActionResult<AuthDTO>> Register(RegisterDTO registerDto)
         {
+            // Check for duplicate email
+            if (await _context.Users.AnyAsync(u => u.Email == registerDto.Email.ToLower()))
+            {
+                return BadRequest("Email is already in use.");
+            }
+
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
@@ -115,6 +121,7 @@ namespace MrKoolApplication.Controllers
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
+
 
     }
 }

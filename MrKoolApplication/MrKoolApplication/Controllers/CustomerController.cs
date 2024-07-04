@@ -100,6 +100,20 @@ namespace MrKool.Controllers
             return NoContent();
         }
 
+        [HttpPut]
+        [Route("UpdateCustomerArea/{customerID}")]
+        public async Task<IActionResult> UpdateCustomerArea(int customerID, int areaID)
+        {
+            if (areaID == null) return BadRequest();
+            if (!_customerRepository.CustomerExist(customerID)) return BadRequest();
+
+           var customer = await _customerRepository.GetById(customerID);
+            customer.AreaID = areaID;
+            
+            _customerRepository.UpdateCustomer(customer);
+            return NoContent();
+        }
+
         [HttpDelete]
         [Route("DeleteCustomer/{id}")]
         public async Task<IActionResult> DeleteCustomerAsync(int id)
