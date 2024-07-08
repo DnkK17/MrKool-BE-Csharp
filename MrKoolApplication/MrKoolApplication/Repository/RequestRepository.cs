@@ -25,7 +25,7 @@ namespace MrKoolApplication.Repository
         }
 
         public async Task<Request> GetRequestByIdAsync(int id)
-        {
+        { 
             return await _context.Requests
                 .Include(r => r.Services)
                 .FirstOrDefaultAsync(r => r.RequestID == id);

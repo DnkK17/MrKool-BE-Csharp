@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using MrKool.Models;
 using MrKoolApplication.Models;
+using MrKoolApplication.VNPay;
 
 var builder = WebApplication.CreateBuilder(args);
 var _config = builder.Configuration;
@@ -57,6 +58,7 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IFixHistoryRepository, FixHistoryRepository>();
 builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -75,7 +77,10 @@ builder.Services.AddCors(options =>
                .WithOrigins("http://localhost:5173");
     });
 });
+
+builder.Services.AddTransient<VnPayPayment>();
 var app = builder.Build();
+
 
 
 // Configure the HTTP request pipeline.

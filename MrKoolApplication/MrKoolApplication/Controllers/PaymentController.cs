@@ -7,7 +7,7 @@ using MrKoolApplication.VNPay;
 namespace MrKoolApplication.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class PaymentController : ControllerBase
     {
         private readonly IPaymentRepository _paymentRepository;
@@ -39,7 +39,7 @@ namespace MrKoolApplication.Controllers
                     Amount = (decimal)amount,
                     Status = "Pending",
                     CreatedDate = DateTime.UtcNow,
-                    RequestId = paymentDto.RequestId // Set RequestId
+                    RequestId = paymentDto.RequestId 
                 };
 
                 payment = await _paymentRepository.CreatePaymentAsync(payment);
