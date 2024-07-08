@@ -27,6 +27,8 @@ namespace MrKool.Data
         public DbSet<Wallet> Wallets { get; set; }
         public DbSet<Users> Users { get; set; }
 
+        public DbSet<Payment> Payments { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
