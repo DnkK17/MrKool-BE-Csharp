@@ -208,11 +208,11 @@ namespace MrKool.Data
                 .OnDelete(DeleteBehavior.NoAction); 
 
 
-            // ConditionerModel - Service (one-to-many)
+            // ConditionerModel - Service (many-to-one)
             modelBuilder.Entity<ConditionerModel>()
-                .HasMany(cm => cm.ServiceList)
+                .HasMany(cm => cm.Services)
                 .WithOne(s => s.Model)
-                .HasForeignKey(s => s.ModelID)
+                .HasForeignKey(s => s.ConditionalModelID)
                 .OnDelete(DeleteBehavior.NoAction); 
 
             // Area - Customer (one-to-many)
@@ -220,9 +220,14 @@ namespace MrKool.Data
                 .HasMany(a => a.CustomerList)
                 .WithOne(c => c.Area)
                 .HasForeignKey(c => c.AreaID)
-                .OnDelete(DeleteBehavior.NoAction); 
+                .OnDelete(DeleteBehavior.NoAction);
 
-            
+            //Request - Model (many-to-one)
+            modelBuilder.Entity<ConditionerModel>()
+                .HasMany(a => a.RequestList)
+                .WithOne(c => c.Model)
+                .HasForeignKey(c => c.ConditionerModelID)
+                .OnDelete(DeleteBehavior.NoAction);
 
         }
     }

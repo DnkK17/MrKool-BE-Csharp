@@ -22,7 +22,8 @@ namespace MrKool.Models
         public int? RequestID { get; set; }
         public Request? Request { get; set; }
 
-        public int? ModelID { get; set; }
-        public ConditionerModel? Model { get; set; }
+       public int? ConditionalModelID { get; set; }
+
+       public ConditionerModel? Model { get; set; }
     }
 }

@@ -33,7 +33,7 @@ namespace MrKoolApplication.Controllers
         }
 
         [HttpGet]
-        [Route("/Managers/search/{ManagerName}")]
+        [Route("/Managers/search")]
         public ActionResult<IEnumerable<ManagerDTO>> GetManagerByName(string keyword)
         {
             var managers = _managerRepository.GetManagersByName(keyword);

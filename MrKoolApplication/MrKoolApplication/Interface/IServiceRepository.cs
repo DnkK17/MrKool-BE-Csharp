@@ -8,6 +8,6 @@ namespace MrKoolApplication.Interface
         Task<List<Service>> GetAllAsync(params Expression<Func<Service, object>>[] includes);
         Service GetById(int serviceID);
         List<Service> GetByNameContaining(string name);
-        List<Service> GetByModel(string model);
+        
     }
 }

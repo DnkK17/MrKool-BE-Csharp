@@ -45,9 +45,9 @@ namespace MrKoolApplication.Controllers
         [HttpGet("search/{keyword}")]
         public ActionResult<IEnumerable<ServiceDTO>> SearchServices(string keyword)
         {
-            var serviceSearch = _serviceRepository.GetByModel(keyword);
+            var serviceSearch = _serviceRepository.GetByNameContaining(keyword);
             if (serviceSearch == null) return NotFound();
-            var serviceSearchDTO = new List<ServiceDTO> { _mapper.Map<ServiceDTO>(serviceSearch) };
+            var serviceSearchDTO = _mapper.Map<IEnumerable<ServiceDTO>>(serviceSearch);
 
             return Ok(serviceSearchDTO);
         }

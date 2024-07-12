@@ -8,6 +8,6 @@
 
         public string Description { get; set; }
 
-
+        public int ModelID { get; set; }
     }
 }

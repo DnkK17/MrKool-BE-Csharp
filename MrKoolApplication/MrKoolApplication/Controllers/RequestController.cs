@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MrKool.Data;
 using MrKool.Interface;
 using MrKool.Models;
+using MrKool.Repository;
 using MrKoolApplication.DTO;
 using MrKoolApplication.Interface;
 using System.Diagnostics.Metrics;
@@ -48,32 +49,22 @@ namespace MrKoolApplication.Controllers
 
 
         [HttpPost]
-        public ActionResult<Request> CreateRequest(RequestDTO requestDto)
+        public IActionResult CreateRequest([FromBody] RequestDTO requestDto)
         {
-            var area = _context.Areas.Find(requestDto.AreaID);
-            var station = _context.Stations.Find(requestDto.StationID);
-            var customer = _context.Customers.Find(requestDto.CustomerID);
-            var services = _context.Services.Where(s => requestDto.ServiceIDs.Contains(s.ServiceID)).ToList();
+            if (requestDto == null) return BadRequest();
 
-            if (area == null || station == null || customer == null || services.Count != requestDto.ServiceIDs.Count)
+           
+
+            var requestMap = _mapper.Map<Request>(requestDto);
+            if (!_requestRepository.CreateRequest(requestMap))
             {
-                return BadRequest("Invalid input data");
+                return StatusCode(500, "A problem happened while handling your request.");
             }
 
-            var request = _mapper.Map<Request>(requestDto);
-            request.Area = area;
-            request.Station = station;
-            request.Customer = customer;
-            request.Services = services;
-            request.Status = Enum.Status.Pending; 
-
-            _requestRepository.CreateRequest(request);
-            _requestRepository.Save();
-
-            return CreatedAtAction(nameof(GetRequestById), new { id = request.RequestID }, request);
+            return Ok("Successfully created the Request.");
         }
 
-        [HttpPut("/approve/manager/{requestID}/{technicianID}")]
+        [HttpPut("/manager/approve/{requestID}/{technicianID}")]
         public IActionResult ApproveRequestByManager(int requestID,int technicianID)
         {
             var request = _context.Requests.Find(requestID);
@@ -88,7 +79,7 @@ namespace MrKoolApplication.Controllers
             return NoContent();
         }
 
-        [HttpPut("{id}/approve/technician")]
+        [HttpPut("/technician/{id}/approve")]
         public IActionResult ApproveRequestByTechnician(int id)
         {
             var request = _context.Requests.Find(id);
@@ -132,6 +123,7 @@ namespace MrKoolApplication.Controllers
         }
 
         [HttpPut]
+        [Route("/manager/updateRequest")]
         [ProducesResponseType(404)]
         public IActionResult UpdateRequest(int requestID, [FromBody] RequestDTO requestUpdate)
         {

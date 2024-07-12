@@ -37,10 +37,7 @@ namespace MrKoolApplication.Repository
             return _context.Services.Where(a => a.ServiceTitle.Contains(name)).ToList();
         }
 
-        public List<Service> GetByModel(string model)
-        {
-            return _context.Services.Where(a => a.Model.Title == model).ToList();
-        }
+       
     }
 
 }
