@@ -32,7 +32,7 @@ namespace MrKool.Controllers
         public async Task<ActionResult<IEnumerable<TechnicianDTO>>> GetTechnicians()
         {
             var technicians = await _technicianRepository.GetAllTechniciansAsync();
-            var technicianDTOs = _mapper.Map<IEnumerable<CustomerDTO>>(technicians);
+            var technicianDTOs = _mapper.Map<IEnumerable<TechnicianDTO>>(technicians);
             return Ok(technicianDTOs);
         }
 
@@ -55,7 +55,7 @@ namespace MrKool.Controllers
         public ActionResult<IEnumerable<TechnicianDTO>> SearchTechnicians(string keyword)
         {
             var technicians = _technicianRepository.GetByNameContaining(keyword);
-            var technicianDTOs = _mapper.Map<IEnumerable<CustomerDTO>>(technicians);
+            var technicianDTOs = _mapper.Map<IEnumerable<TechnicianDTO>>(technicians);
             return Ok(technicianDTOs);
         }
 
