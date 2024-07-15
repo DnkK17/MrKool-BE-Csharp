@@ -22,7 +22,7 @@ namespace MrKoolApplication.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<ConditionerModel>))]
+        [ProducesResponseType(200)]
         public ActionResult GetAllModels()
         {
             var models = _mapper.Map<List<ConditionerModelDTO>>(_modelRepository.GetAll());
@@ -41,16 +41,19 @@ namespace MrKoolApplication.Controllers
             {
                 return NotFound();
             }
+            var modelMap = _mapper.Map<ConditionerModelDTO>(model);
             return model;
         }
 
         [HttpGet("search/{keyword}")]
-        public ActionResult<IEnumerable<ConditionerModel>> SearchModels(string keyword)
+        public ActionResult<ConditionerModelDTO> SearchModels(string keyword)
         {
-            return _modelRepository.GetByNameContaining(keyword);
+            var model = _modelRepository.GetByNameContaining(keyword);
+            var modelMap = _mapper.Map<ConditionerModelDTO>(model);
+            return modelMap;
         }
 
-       
+
 
         //CRUD
 
