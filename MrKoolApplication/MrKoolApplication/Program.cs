@@ -81,8 +81,6 @@ builder.Services.AddCors(options =>
 builder.Services.AddTransient<VnPayPayment>();
 var app = builder.Build();
 
-
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -91,7 +89,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Ensure CORS is used before authentication and authorization
 app.UseCors("AllowLocalhost5173");
+
 app.UseAuthentication();
 app.UseAuthorization();
 
