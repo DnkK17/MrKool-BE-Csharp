@@ -22,13 +22,13 @@ namespace MrKool.Controllers
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
-        private readonly Status _status;
         private readonly DBContext _context;
-        public OrderController(IOrderRepository orderRepository, IMapper mapper, Status status)
+
+        public OrderController(IOrderRepository orderRepository, IMapper mapper, DBContext context)
         {
             _orderRepository = orderRepository;
             _mapper = mapper;
-            _status = status;
+            _context = context;
         }
 
         [HttpGet]
@@ -65,14 +65,18 @@ namespace MrKool.Controllers
             return Ok(orderDTOs);
         }
 
-
         [HttpPut("technician/complete/{orderID}")]
         public IActionResult CompletedOrderByTechnician(int orderID)
         {
             var order = _context.Orders.Find(orderID);
             if (order == null) return NotFound();
-            order.Status = Status.Approved;
+
+            // Kiểm tra nếu order.Request là null
+            if (order.Request == null) return BadRequest("Order request is null");
+
+            order.Status = Status.Approved; // Trực tiếp sử dụng enum
             _context.SaveChanges();
+
             double? totalPrice = order.Request.TotalPrice;
             var newFixHistory = new FixHistory
             {
@@ -81,13 +85,15 @@ namespace MrKool.Controllers
                 TechnicianID = order.TechnicianID,
                 OrderDetailList = order.OrderDetailList,
             };
+
             var newTransaction = new Transaction
             {
-                Amount = (long)totalPrice,
+                Amount = (long?)totalPrice ?? 0, // Sử dụng 0 nếu totalPrice là null
                 Date = DateTime.Now,
                 Status = true,
-                WalletID = order.Technician.WalletID ?? throw new Exception()
+                WalletID = order.Technician.WalletID ?? throw new Exception("Technician WalletID is null")
             };
+
             _context.FixHistories.Add(newFixHistory);
             _context.Transactions.Add(newTransaction);
             _context.SaveChanges();
@@ -95,7 +101,6 @@ namespace MrKool.Controllers
         }
 
 
-        //CRUD
         [HttpPost]
         [Route("CreateOrder")]
         [ProducesResponseType(204)]
@@ -118,7 +123,6 @@ namespace MrKool.Controllers
 
             return Ok("Successfully created the order.");
         }
-
 
         [HttpPut]
         [Route("UpdateOrder/{orderID}")]
