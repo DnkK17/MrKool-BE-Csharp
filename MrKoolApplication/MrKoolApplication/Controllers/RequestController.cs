@@ -59,7 +59,6 @@ namespace MrKoolApplication.Controllers
 
             var request = _mapper.Map<Request>(requestDto);
 
-            // Lấy danh sách dịch vụ từ ServiceIDs
             if (requestDto.ServiceIDs != null)
             {
                 request.Services = new List<Service>();
@@ -117,6 +116,7 @@ namespace MrKoolApplication.Controllers
                 Status = Enum.Status.Processing,
                 Customer = request.Customer,
                 CustomerID = request.CustomerID,
+                TechnicianID = request.TechnicianID,
                 OrderDetailList = new List<OrderDetail>(),
                 TotalPrice = request.TotalPrice
             };

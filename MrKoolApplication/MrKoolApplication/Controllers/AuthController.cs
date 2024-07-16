@@ -75,9 +75,21 @@ namespace MrKoolApplication.Controllers
                         Telephone = registerDto.Telephone,
                         userID = user.Id,
                         CustomerName = registerDto.name,
+                        Address = registerDto.Address,
                         Status = true
                     };
                     _context.Customers.Add(newCustomer);
+                    await _context.SaveChangesAsync();
+
+                    var newWallet = new Wallet
+                    {
+
+                        Balance = 0,
+                        IsDeleted = false,
+                        Status = true,
+                        userID = user.Id,
+                    };
+                    _context.Wallets.Add(newWallet);
                     await _context.SaveChangesAsync();
                 }
                 else if (registerDto.roleName.ToLower() == "technician")
@@ -87,10 +99,25 @@ namespace MrKoolApplication.Controllers
                         Email = registerDto.Email,
                         Password = registerDto.Password,
                         Telephone = registerDto.Telephone,
+                        Address = registerDto.Address,
                         userID = user.Id,
                         TechnicianName = registerDto.name
                     };
                     _context.Technicians.Add(newTechnician);
+                    await _context.SaveChangesAsync();
+
+                    var newWallet = new Wallet
+                    {
+
+                        Balance = 0,
+                        IsDeleted = false,
+                        Status = true,
+                        userID = user.Id,
+                    };
+                    _context.Wallets.Add(newWallet);
+                    await _context.SaveChangesAsync();
+
+                    newTechnician.WalletID = newWallet.WalletID;
                     await _context.SaveChangesAsync();
                 }
                 else if (registerDto.roleName.ToLower() == "manager")
@@ -100,10 +127,25 @@ namespace MrKoolApplication.Controllers
                         Email = registerDto.Email,
                         Password = registerDto.Password,
                         Telephone = registerDto.Telephone,
+                        Address = registerDto.Address,
                         userID = user.Id,
                         ManagerName = registerDto.name
                     };
                     _context.Managers.Add(newManager);
+                    await _context.SaveChangesAsync();
+
+                    var newWallet = new Wallet
+                    {
+
+                        Balance = 0,
+                        IsDeleted = false,
+                        Status = true,
+                        userID = user.Id,
+                    };
+                    _context.Wallets.Add(newWallet);
+                    await _context.SaveChangesAsync();
+
+                    newManager.WalletID = newWallet.WalletID;
                     await _context.SaveChangesAsync();
                 }
 

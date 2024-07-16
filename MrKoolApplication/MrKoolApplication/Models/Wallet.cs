@@ -1,4 +1,6 @@
-﻿namespace MrKool.Models
+﻿using MrKoolApplication.Models;
+
+namespace MrKool.Models
 {
     public class Wallet
     {
@@ -7,6 +9,9 @@
         public bool Status { get; set; }
         public bool IsDeleted { get; set; }
 
+        public Guid? userID { get; set; }
+
+        public Users? User {  get; set; } 
         // Relationships
         /*public int ManagerID {  get; set; }
         public Manager Manager { get; set; } = null!;

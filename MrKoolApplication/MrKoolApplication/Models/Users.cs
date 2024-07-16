@@ -1,4 +1,6 @@
-﻿namespace MrKoolApplication.Models
+﻿using MrKool.Models;
+
+namespace MrKoolApplication.Models
 {
     public class Users
     {
@@ -10,5 +12,7 @@
         public byte[]? SaltPassword { get; set; }
 
         public string? RoleName { get; set; }
+
+      
     }
 }

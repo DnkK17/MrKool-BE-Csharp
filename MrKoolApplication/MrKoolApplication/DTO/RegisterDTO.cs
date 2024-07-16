@@ -11,5 +11,7 @@
 
         public string name { get; set; }
         public string Telephone { get; set; }
+
+        public string Address { get; set; }
     }
 }

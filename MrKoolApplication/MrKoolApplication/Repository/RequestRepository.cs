@@ -42,8 +42,16 @@ namespace MrKoolApplication.Repository
         {
             if (request.Services != null)
             {
-                request.TotalPrice = request.Services.Sum(service => service.Price);
+                double totalPrice = 0;
+
+                foreach (var service in request.Services)
+                {
+                    totalPrice += service.Price;
+                }
+
+                request.TotalPrice = totalPrice;
             }
+
             _context.Requests.Add(request);
             await _context.SaveChangesAsync();
             return request;

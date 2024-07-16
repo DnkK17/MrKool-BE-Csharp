@@ -85,6 +85,7 @@ namespace MrKool.Controllers
                 Title = order.Title,
                 TechnicianID = order.TechnicianID,
                 OrderDetailList = order.OrderDetailList,
+                Description = order.Detail,
             };
 
             var newTransaction = new Transaction
@@ -94,6 +95,9 @@ namespace MrKool.Controllers
                 Status = true,
                 WalletID = technician.WalletID ?? throw new Exception("Technician WalletID is null")
             };
+
+            var wallet = _context.Wallets.Find(technician.WalletID);
+            wallet.Balance = (30*(long?)order.TotalPrice)/100 ?? 0;
 
             _context.FixHistories.Add(newFixHistory);
             _context.Transactions.Add(newTransaction);
