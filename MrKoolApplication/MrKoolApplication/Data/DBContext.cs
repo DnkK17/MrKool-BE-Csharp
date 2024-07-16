@@ -199,14 +199,7 @@ namespace MrKool.Data
                 .HasForeignKey(r => r.ManagerID)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            // Order - Request (one-to-one)
-            modelBuilder.Entity<Order>()
-                .HasOne(o => o.Request)           
-                .WithOne(r => r.Order)            
-                .HasForeignKey<Request>(r => r.OrderID) 
-                .IsRequired()                    
-                .OnDelete(DeleteBehavior.NoAction); 
-
+        
 
             // ConditionerModel - Service (many-to-one)
             modelBuilder.Entity<ConditionerModel>()

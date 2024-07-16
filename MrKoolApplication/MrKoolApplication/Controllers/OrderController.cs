@@ -71,13 +71,11 @@ namespace MrKool.Controllers
             var order = _context.Orders.Find(orderID);
             if (order == null) return NotFound();
 
-            // Kiểm tra nếu order.Request là null
-            if (order.Request == null) return BadRequest("Order request is null");
 
-            order.Status = Status.Approved; // Trực tiếp sử dụng enum
+            order.Status = Status.Approved; 
             _context.SaveChanges();
 
-            double? totalPrice = order.Request.TotalPrice;
+
             var newFixHistory = new FixHistory
             {
                 CustomerID = order.CustomerID,
@@ -88,7 +86,7 @@ namespace MrKool.Controllers
 
             var newTransaction = new Transaction
             {
-                Amount = (long?)totalPrice ?? 0, // Sử dụng 0 nếu totalPrice là null
+                Amount = (long?)order.TotalPrice ?? 0, 
                 Date = DateTime.Now,
                 Status = true,
                 WalletID = order.Technician.WalletID ?? throw new Exception("Technician WalletID is null")

@@ -92,12 +92,13 @@ namespace MrKoolApplication.Controllers
             // Create a new order
             var order = new Order
             {
+                OrderID = request.RequestID,
                 Date = request.Date,
                 Title = request.Description,
                 Address = request.RequestAddress,
-                Status = Enum.Status.Processing, 
+                Status = Enum.Status.Processing,
                 Customer = request.Customer,
-                CustomerID = request.CustomerID, 
+                CustomerID = request.CustomerID,
                 OrderDetailList = new List<OrderDetail>(),
                 TotalPrice = request.TotalPrice
             };

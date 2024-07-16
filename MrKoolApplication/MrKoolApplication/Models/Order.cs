@@ -21,8 +21,7 @@ namespace MrKool.Models
         public int? TechnicianID { get; set; }
 
         public Technician? Technician { get; set; }
-        public int? RequestID { get; set; }
-        public Request Request { get; set; }
+       
 
         public int? CustomerID { get; set; }
         public Customer? Customer { get; set; }

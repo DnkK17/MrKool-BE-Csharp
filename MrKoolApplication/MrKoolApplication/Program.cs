@@ -16,6 +16,16 @@ using MrKoolApplication.VNPay;
 var builder = WebApplication.CreateBuilder(args);
 var _config = builder.Configuration;
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost5173", builder =>
+    {
+        builder.AllowAnyHeader()
+               .AllowCredentials()
+               .AllowAnyMethod()
+               .WithOrigins("http://localhost:5173");
+    });
+});
 // Add services to the container.
 builder.Services.AddControllers()
            .AddJsonOptions(options =>
@@ -67,20 +77,11 @@ builder.Services.AddDbContext<DBContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("LocalDB"));
 });
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowLocalhost5173", builder =>
-    {
-        builder.AllowAnyHeader()
-               .AllowCredentials()
-               .AllowAnyMethod()
-               .WithOrigins("http://localhost:5173");
-    });
-});
+
 
 builder.Services.AddTransient<VnPayPayment>();
 var app = builder.Build();
-
+app.UseCors("AllowLocalhost5173");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -90,8 +91,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Ensure CORS is used before authentication and authorization
-app.UseCors("AllowLocalhost5173");
+
 
 app.UseAuthentication();
 app.UseAuthorization();
