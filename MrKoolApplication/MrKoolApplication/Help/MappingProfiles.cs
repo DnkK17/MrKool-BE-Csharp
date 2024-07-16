@@ -13,9 +13,10 @@ namespace MrKoolApplication.Help
                 .ForMember(dest => dest.Stations, opt => opt.MapFrom(src => src.StationList));
             CreateMap<AreaDTO, Area>();
             CreateMap<Station, StationDTO>().ReverseMap();
-            CreateMap<Service, ServiceDTO>();
+            CreateMap<Service, ServiceDTO>().ReverseMap();
+            
             CreateMap<Customer, CustomerDTO>();
-            CreateMap<Request, RequestDTO>().ForMember(dest => dest.Services, opt => opt.Ignore());
+            CreateMap<Request, RequestDTO>().ForMember(dest => dest.Services, opt => opt.MapFrom(src => src.Services));
             CreateMap<ConditionerModel, ConditionerModelDTO>();
             CreateMap<Manager,  ManagerDTO>(); 
             CreateMap<Technician, TechnicianDTO>();

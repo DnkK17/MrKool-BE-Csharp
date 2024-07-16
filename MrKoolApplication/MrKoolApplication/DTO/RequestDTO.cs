@@ -16,8 +16,6 @@ namespace MrKoolApplication.DTO
 
         public int StationID { get; set; }
 
-        public string Address { get; set; }
-
         public List<ServiceDTO> Services { get; set; }
 
 
