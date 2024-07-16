@@ -38,10 +38,15 @@ namespace MrKoolApplication.Repository
                 .FirstOrDefault(r => r.RequestID == requestID);
         }
 
-        public bool CreateRequest(Request request)
+        public async Task<Request> CreateRequestAsync(Request request)
         {
+            if (request.Services != null)
+            {
+                request.TotalPrice = request.Services.Sum(service => service.Price);
+            }
             _context.Requests.Add(request);
-            return Save();
+            await _context.SaveChangesAsync();
+            return request;
         }
 
         public bool UpdateRequest(Request request)

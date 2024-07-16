@@ -1,10 +1,14 @@
 ﻿using MrKoolApplication.Models;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
 namespace MrKool.Models
 {
     public class Service
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ServiceID { get; set; }
         public string ServiceTitle { get; set; }
         public string image {  get; set; }

@@ -31,6 +31,6 @@
             public int? TechnicianID { get; set; }
             public Technician? Technician { get; set; }
 
-            public double? TotalPrice => Services.Sum(service => service.Price) ;
+            public double? TotalPrice { get; set; }
         }
     }

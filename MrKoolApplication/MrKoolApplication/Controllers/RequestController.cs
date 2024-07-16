@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MrKool.Data;
 using MrKool.Interface;
 using MrKool.Models;
@@ -49,19 +50,33 @@ namespace MrKoolApplication.Controllers
 
 
         [HttpPost]
-        public IActionResult CreateRequest([FromBody] RequestDTO requestDto)
+        public async Task<IActionResult> CreateRequest([FromBody] RequestDTO requestDto)
         {
-            if (requestDto == null) return BadRequest();
-
-           
-
-            var requestMap = _mapper.Map<Request>(requestDto);
-            if (!_requestRepository.CreateRequest(requestMap))
+            if (!ModelState.IsValid)
             {
-                return StatusCode(500, "A problem happened while handling your request.");
+                return BadRequest(ModelState);
             }
 
-            return Ok("Successfully created the Request.");
+            var request = _mapper.Map<Request>(requestDto);
+
+            // Lấy danh sách dịch vụ từ ServiceIDs
+            if (requestDto.ServiceIDs != null)
+            {
+                request.Services = new List<Service>();
+                foreach (var serviceId in requestDto.ServiceIDs)
+                {
+                    var service = await _context.Services.FindAsync(serviceId);
+                    if (service != null)
+                    {
+                        request.Services.Add(service);
+                    }
+                }
+            }
+
+            var createdRequest = await _requestRepository.CreateRequestAsync(request);
+            var createdRequestDto = _mapper.Map<RequestDTO>(createdRequest);
+
+            return CreatedAtAction(nameof(GetRequestById), new { id = createdRequest.RequestID }, createdRequestDto);
         }
 
         [HttpPut("/manager/approve/{requestID}/{technicianID}")]
@@ -82,7 +97,10 @@ namespace MrKoolApplication.Controllers
         [HttpPut("/technician/{id}/approve")]
         public IActionResult ApproveRequestByTechnician(int id)
         {
-            var request = _context.Requests.Find(id);
+            var request = _context.Requests
+                          .Include(r => r.Services)
+                          .FirstOrDefault(r => r.RequestID == id);
+
             if (request == null)
             {
                 return NotFound();
@@ -92,16 +110,18 @@ namespace MrKoolApplication.Controllers
             // Create a new order
             var order = new Order
             {
-                OrderID = request.RequestID,
                 Date = request.Date,
                 Title = request.Description,
                 Address = request.RequestAddress,
+                Time = DateTime.Now,
                 Status = Enum.Status.Processing,
                 Customer = request.Customer,
                 CustomerID = request.CustomerID,
                 OrderDetailList = new List<OrderDetail>(),
                 TotalPrice = request.TotalPrice
             };
+            _context.Orders.Add(order);
+            _context.SaveChanges();
 
             foreach (var service in request.Services)
             {
@@ -117,7 +137,6 @@ namespace MrKoolApplication.Controllers
 
                 order.OrderDetailList.Add(orderDetail);
             }
-            _context.Orders.Add(order);
             _context.SaveChanges();
 
             return NoContent();

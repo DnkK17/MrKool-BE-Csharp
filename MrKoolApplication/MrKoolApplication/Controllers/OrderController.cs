@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MrKool.Data;
@@ -68,13 +69,15 @@ namespace MrKool.Controllers
         [HttpPut("technician/complete/{orderID}")]
         public IActionResult CompletedOrderByTechnician(int orderID)
         {
-            var order = _context.Orders.Find(orderID);
+            var order = _context.Orders
+                   .Include(o => o.Technician)
+                   .FirstOrDefault(o => o.OrderID == orderID);
             if (order == null) return NotFound();
 
 
             order.Status = Status.Approved; 
             _context.SaveChanges();
-
+            var technician = _context.Technicians.Find(order.TechnicianID);
 
             var newFixHistory = new FixHistory
             {
@@ -89,7 +92,7 @@ namespace MrKool.Controllers
                 Amount = (long?)order.TotalPrice ?? 0, 
                 Date = DateTime.Now,
                 Status = true,
-                WalletID = order.Technician.WalletID ?? throw new Exception("Technician WalletID is null")
+                WalletID = technician.WalletID ?? throw new Exception("Technician WalletID is null")
             };
 
             _context.FixHistories.Add(newFixHistory);
