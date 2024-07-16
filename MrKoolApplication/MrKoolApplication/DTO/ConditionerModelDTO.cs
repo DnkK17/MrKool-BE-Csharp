@@ -9,7 +9,6 @@ namespace MrKoolApplication.DTO
         public double Price { get; set; }
         public String image { get; set; }
 
-        public string image { get; set; }
         public List<Service> Services { get; set; }
     }
 }
