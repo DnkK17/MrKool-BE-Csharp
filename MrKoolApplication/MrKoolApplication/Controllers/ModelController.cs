@@ -61,11 +61,7 @@ namespace MrKoolApplication.Controllers
         public IActionResult CreateModel([FromBody] ConditionerModelDTO modelCreate)
         {
             if (modelCreate == null) return BadRequest();
-            var model = _modelRepository.GetModels().Where(c => c.Title == modelCreate.Title);
-            if (model != null)
-            {
-                return BadRequest();
-            }
+          
             var modelMap = _mapper.Map<ConditionerModel>(modelCreate);
             if (!_modelRepository.CreateModel(modelMap))
                 return StatusCode(500);
