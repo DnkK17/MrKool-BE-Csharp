@@ -88,7 +88,6 @@ namespace MrKool.Controllers
         public IActionResult UpdateCustomer(int customerID, [FromBody] CustomerDTO customerUpdate)
         {
             if (customerUpdate == null) return BadRequest();
-            if (customerID != customerUpdate.CustomerID) return BadRequest();
             if (!_customerRepository.CustomerExist(customerID)) return BadRequest();
 
             var customerMap = _mapper.Map<Customer>(customerUpdate);

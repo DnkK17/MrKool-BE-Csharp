@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using MrKool.DTO;
 using MrKool.Interface;
 using MrKool.Models;
+using MrKool.Repository;
 using MrKoolApplication.DTO;
 using MrKoolApplication.Interface;
 
@@ -52,6 +54,58 @@ namespace MrKoolApplication.Controllers
             return Ok(serviceSearchDTO);
         }
 
+        [HttpPost]
+        [Route("CreateService")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateService([FromBody] ServiceDTO serviceCreate)
+        {
+            if (serviceCreate == null) return BadRequest();
 
+            var service = _serviceRepository.GetServices().FirstOrDefault(c => c.ServiceTitle == serviceCreate.ServiceTitle);
+            if (service != null)
+            {
+                return BadRequest("Area with the same title already exists.");
+            }
+
+            var serviceMap = _mapper.Map<Service>(serviceCreate);
+            if (!_serviceRepository.CreateService(serviceMap))
+            {
+                return StatusCode(500, "A problem happened while handling your request.");
+            }
+
+            return Ok("Successfully created the service.");
+        }
+
+        [HttpPut]
+        [Route("UpdateService/{serviceID}")]
+        public IActionResult UpdateService(int serviceID, [FromBody] ServiceDTO serviceUpdate)
+        {
+            if (serviceUpdate == null) return BadRequest();
+            if (serviceID != serviceUpdate.ServiceID) return BadRequest();
+            if (!_serviceRepository.ServiceExist(serviceID)) return BadRequest();
+
+            var serviceMap = _mapper.Map<Service>(serviceUpdate);
+            if (!_serviceRepository.UpdateService(serviceMap))
+            {
+                return StatusCode(500, "A problem happened while handling your request.");
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete]
+        [Route("DeleteService/{id}")]
+        public async Task<IActionResult> DeleteServiceAsync(int id)
+        {
+            var service =  _serviceRepository.GetById(id);
+            if (service == null)
+            {
+                return NotFound();
+            }
+
+            service.IsDeleted = true;
+            return NoContent();
+        }
     }
 }

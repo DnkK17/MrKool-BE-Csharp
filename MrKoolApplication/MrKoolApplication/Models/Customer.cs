@@ -9,16 +9,16 @@ namespace MrKool.Models
         public string Email { get; set; }
 
         public string Password { get; set; }
-        public string Telephone { get; set; }
-        public string CustomerName { get; set; }
-        public string Address { get; set; }
+        public string? Telephone { get; set; }
+        public string? CustomerName { get; set; }
+        public string? Address { get; set; }
 
-        public bool Status { get; set; }
-        public bool IsDeleted { get; set; }
+        public bool? Status { get; set; }
+        public bool? IsDeleted { get; set; }
 
         // Relationship
-        public Guid userID { get; set; }
-        public Users user { get; set; }
+        public Guid? userID { get; set; }
+        public Users? user { get; set; }
 
         public int? AreaID   { get; set; }
         public Area? Area { get; set; }

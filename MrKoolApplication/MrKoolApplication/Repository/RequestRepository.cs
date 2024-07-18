@@ -42,7 +42,7 @@ namespace MrKoolApplication.Repository
         {
             if (request.Services != null)
             {
-                double totalPrice = 0;
+                double? totalPrice = 0;
 
                 foreach (var service in request.Services)
                 {

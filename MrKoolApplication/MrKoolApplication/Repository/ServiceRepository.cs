@@ -37,7 +37,39 @@ namespace MrKoolApplication.Repository
             return _context.Services.Where(a => a.ServiceTitle.Contains(name)).ToList();
         }
 
-       
+        public List<Service> GetServices()
+        {
+            return _context.Services.ToList();
+        }
+
+        //CRUD
+        public bool ServiceExist(int serviceID)
+        {
+            return _context.Set<Service>().Any(a => a.ServiceID == serviceID);
+        }
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
+        }
+
+        public bool CreateService(Service Service)
+        {
+            _context.Add(Service);
+            return Save();
+        }
+
+        public bool UpdateService(Service Service)
+        {
+            _context.Update(Service);
+            return Save();
+        }
+
+        public async Task DeleteServiceAsync(Service Service)
+        {
+            _context.Services.Remove(Service);
+            await _context.SaveChangesAsync();
+        }
     }
 
 }

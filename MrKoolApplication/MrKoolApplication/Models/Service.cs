@@ -10,14 +10,14 @@ namespace MrKool.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ServiceID { get; set; }
-        public string ServiceTitle { get; set; }
-        public string image {  get; set; }
-        public double Price { get; set; }
-        public string Description { get; set; }
+        public string? ServiceTitle { get; set; }
+        public string? image {  get; set; }
+        public double? Price { get; set; }
+        public string? Description { get; set; }
 
-        public bool Status { get; set; }
+        public bool? Status { get; set; } = true;
 
-        public bool IsDeleted { get; set; }
+        public bool? IsDeleted { get; set; } = false;
         // Relationships
         public ICollection<OrderDetail>? OrderDetailList { get; set; }
 
