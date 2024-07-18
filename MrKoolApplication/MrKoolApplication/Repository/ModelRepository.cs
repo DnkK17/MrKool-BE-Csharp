@@ -63,7 +63,7 @@ namespace MrKoolApplication.Repository
 
         public bool DeleteModel(ConditionerModel model)
         {
-            _context.Models.Remove(model);
+            
             return Save();
         }
     }

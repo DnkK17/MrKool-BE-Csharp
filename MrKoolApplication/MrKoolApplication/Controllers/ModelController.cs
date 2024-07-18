@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using MrKool.Data;
 using MrKool.DTO;
 using MrKool.Interface;
 using MrKool.Models;
@@ -16,10 +17,12 @@ namespace MrKoolApplication.Controllers
     {
         private readonly IModelRepository _modelRepository;
         private readonly IMapper _mapper;
-        public ModelController(IModelRepository modelRepository, IMapper mapper)
+        private readonly DBContext _context;
+        public ModelController(IModelRepository modelRepository, IMapper mapper, DBContext context)
         {
             _modelRepository = modelRepository;
             _mapper = mapper;
+            _context = context;
         }
 
         [HttpGet]
@@ -85,13 +88,14 @@ namespace MrKoolApplication.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteModel(int id)
         {
-            var model = _modelRepository.GetById(id);
+            var model = _context.Models.Find(id);
             if (model == null)
             {
                 return NotFound();
             }
-            _modelRepository.DeleteModel(model);
-
+            model.IsDeleted = true;
+            model.Status = false;
+            _context.SaveChanges();
             return NoContent();
         }
     }
