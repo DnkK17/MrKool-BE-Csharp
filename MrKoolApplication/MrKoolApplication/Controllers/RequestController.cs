@@ -71,22 +71,21 @@ namespace MrKoolApplication.Controllers
                     }
                 }
             }
-
+            request.Status = Enum.Status.Pending; 
             var createdRequest = await _requestRepository.CreateRequestAsync(request);
             var createdRequestDto = _mapper.Map<RequestDTO>(createdRequest);
 
             return CreatedAtAction(nameof(GetRequestById), new { id = createdRequest.RequestID }, createdRequestDto);
         }
 
-        [HttpPut("/manager/{managerID}/approve/{requestID}/{technicianID}")]
-        public IActionResult ApproveRequestByManager(int requestID,int managerID,int technicianID)
+        [HttpPut("/manager/approve/{requestID}/{technicianID}")]
+        public IActionResult ApproveRequestByManager(int requestID,int technicianID)
         {
             var request = _context.Requests.Find(requestID);
             if (request == null)
             {
                 return NotFound();
             }
-            request.ManagerID = managerID;
             request.Status = Enum.Status.Approved; 
             request.TechnicianID = technicianID; 
             _context.SaveChanges();
