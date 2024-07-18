@@ -8,9 +8,9 @@ namespace MrKool.Models
         public string Title { get; set; }
         public string AreaAddress { get; set; }
 
-        public string City { get; set; }    
+        public string City { get; set; }
 
-        public bool Status { get; set; }
+        public bool Status { get; set; } = true;
         public bool? IsDeleted { get; set; } = false;   
         // Relationship
         public ICollection<Customer>? CustomerList { get; set; }

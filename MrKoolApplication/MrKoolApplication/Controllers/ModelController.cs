@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using MrKool.DTO;
 using MrKool.Interface;
 using MrKool.Models;
 using MrKool.Repository;
@@ -23,18 +24,15 @@ namespace MrKoolApplication.Controllers
 
         [HttpGet]
         [ProducesResponseType(200)]
-        public ActionResult GetAllModels()
+        public async Task<ActionResult<ConditionerModelDTO>> GetAllModels()
         {
-            var models = _mapper.Map<List<ConditionerModelDTO>>(_modelRepository.GetAll());
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            return Ok(models);
+            var models =  _modelRepository.GetAll();
+            var modelDTOS = _mapper.Map<IEnumerable<ConditionerModelDTO>>(models);
+            return Ok(modelDTOS);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<ConditionerModel> GetModelById(int id)
+        public ActionResult<ConditionerModelDTO> GetModelById(int id)
         {
             var model = _modelRepository.GetById(id);
             if (model == null)
@@ -42,7 +40,7 @@ namespace MrKoolApplication.Controllers
                 return NotFound();
             }
             var modelMap = _mapper.Map<ConditionerModelDTO>(model);
-            return model;
+            return Ok(modelMap);
         }
 
         [HttpGet("search/{keyword}")]
@@ -60,7 +58,7 @@ namespace MrKoolApplication.Controllers
         [HttpPost("/CreateModel")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateModel([FromBody] ConditionerModel modelCreate)
+        public IActionResult CreateModel([FromBody] ConditionerModelDTO modelCreate)
         {
             if (modelCreate == null) return BadRequest();
             var model = _modelRepository.GetModels().Where(c => c.Title == modelCreate.Title);
@@ -76,10 +74,9 @@ namespace MrKoolApplication.Controllers
         }
 
         [HttpPut("/UpdateModel/{modelID}")]
-        public IActionResult UpdateModel(int modelID, [FromBody] ConditionerModel modelUpdate)
+        public IActionResult UpdateModel(int modelID, [FromBody] ConditionerModelDTO modelUpdate)
         {
             if (modelUpdate == null) return BadRequest();
-            if (modelID != modelUpdate.ConditionerModelID) return BadRequest();
             if (!_modelRepository.ModelExist(modelID)) return BadRequest();
             var modelMap = _mapper.Map<ConditionerModel>(modelUpdate);
             if (!_modelRepository.UpdateModel(modelMap))

@@ -17,7 +17,7 @@ namespace MrKoolApplication.Help
             
             CreateMap<Customer, CustomerDTO>().ReverseMap();
             CreateMap<Request, RequestDTO>().ForMember(dest => dest.Services, opt => opt.MapFrom(src => src.Services));
-            CreateMap<ConditionerModel, ConditionerModelDTO>();
+            CreateMap<ConditionerModel, ConditionerModelDTO>().ReverseMap();
             CreateMap<Manager,  ManagerDTO>(); 
             CreateMap<Technician, TechnicianDTO>();
             CreateMap<Transaction, TransactionDTO>();

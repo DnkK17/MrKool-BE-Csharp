@@ -78,15 +78,15 @@ namespace MrKoolApplication.Controllers
             return CreatedAtAction(nameof(GetRequestById), new { id = createdRequest.RequestID }, createdRequestDto);
         }
 
-        [HttpPut("/manager/approve/{requestID}/{technicianID}")]
-        public IActionResult ApproveRequestByManager(int requestID,int technicianID)
+        [HttpPut("/manager/{managerID}/approve/{requestID}/{technicianID}")]
+        public IActionResult ApproveRequestByManager(int requestID,int managerID,int technicianID)
         {
             var request = _context.Requests.Find(requestID);
             if (request == null)
             {
                 return NotFound();
             }
-            
+            request.ManagerID = managerID;
             request.Status = Enum.Status.Approved; 
             request.TechnicianID = technicianID; 
             _context.SaveChanges();
