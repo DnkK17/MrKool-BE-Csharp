@@ -13,8 +13,8 @@ namespace MrKool.Models
         public string? CustomerName { get; set; }
         public string? Address { get; set; }
 
-        public bool? Status { get; set; }
-        public bool? IsDeleted { get; set; }
+        public bool? Status { get; set; } = true;   
+        public bool? IsDeleted { get; set; } =false;
 
         // Relationship
         public Guid? userID { get; set; }

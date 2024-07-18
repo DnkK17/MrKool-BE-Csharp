@@ -10,9 +10,9 @@ namespace MrKool.Models
         public string? Password { get; set; }
 
         public string? Address { get; set; }
-        public bool? Status { get; set; }
+        public bool? Status { get; set; } = true;
         public string? ManagerName  { get; set; }
-        public bool? IsDeleted { get; set; }
+        public bool? IsDeleted { get; set; } = false;
 
         // Relationships
         public Guid? userID   { get; set; }

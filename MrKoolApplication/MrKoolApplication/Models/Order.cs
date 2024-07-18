@@ -14,7 +14,7 @@ namespace MrKool.Models
         public Status Status { get; set; }
 
         public double? TotalPrice { get; set; }
-        public bool IsDeleted { get; set; }
+        public bool IsDeleted { get; set; } = false;
         // Relationships
         public ICollection<OrderDetail>? OrderDetailList { get; set; }
 

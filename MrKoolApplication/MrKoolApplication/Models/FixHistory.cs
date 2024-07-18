@@ -9,7 +9,7 @@ namespace MrKool.Models
         public DateTime Date { get; set; }
         public string? Description { get; set; }
 
-        public bool? Status { get; set; }
+        public bool? Status { get; set; } = true;
         public bool? IsDeleted { get; set; } = false;
 
         // Relationships
