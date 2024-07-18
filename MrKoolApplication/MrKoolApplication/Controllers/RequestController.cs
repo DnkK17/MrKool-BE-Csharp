@@ -78,8 +78,8 @@ namespace MrKoolApplication.Controllers
             return CreatedAtAction(nameof(GetRequestById), new { id = createdRequest.RequestID }, createdRequestDto);
         }
 
-        [HttpPut("/manager/approve/{requestID}/{technicianID}")]
-        public IActionResult ApproveRequestByManager(int requestID,int technicianID)
+        [HttpPut("/manager/approve/{requestID}")]
+        public IActionResult ApproveRequestByManager(int requestID)
         {
             var request = _context.Requests.Find(requestID);
             if (request == null)
@@ -87,25 +87,24 @@ namespace MrKoolApplication.Controllers
                 return NotFound();
             }
             request.Status = Enum.Status.Approved; 
-            request.TechnicianID = technicianID; 
+           
             _context.SaveChanges();
             return NoContent();
         }
 
-        [HttpPut("/technician/{id}/approve")]
-        public IActionResult ApproveRequestByTechnician(int id)
+        [HttpPut("/technician/{technicianID}/approve/{requestID}")]
+        public IActionResult ApproveRequestByTechnician(int requestID,int technicianID)
         {
             var request = _context.Requests
                           .Include(r => r.Services)
-                          .FirstOrDefault(r => r.RequestID == id);
+                          .FirstOrDefault(r => r.RequestID == requestID);
 
             if (request == null)
             {
                 return NotFound();
             }
+            request.TechnicianID = technicianID;
 
-
-            // Create a new order
             var order = new Order
             {
                 Date = request.Date,

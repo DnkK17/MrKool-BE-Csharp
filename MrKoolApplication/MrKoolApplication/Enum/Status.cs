@@ -6,7 +6,8 @@
         Pending,
         Processing,
         Approved,
-        Rejected
+        Rejected,
+        Completed
     }
 
 }
