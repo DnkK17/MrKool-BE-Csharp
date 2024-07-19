@@ -75,7 +75,7 @@ namespace MrKool.Controllers
             if (order == null) return NotFound();
 
 
-            order.Status = Status.Approved; 
+            order.Status = Status.Completed; 
             _context.SaveChanges();
             var technician = _context.Technicians.Find(order.TechnicianID);
 
@@ -85,7 +85,7 @@ namespace MrKool.Controllers
                 Title = order.Title,
                 TechnicianID = order.TechnicianID,
                 OrderDetailList = order.OrderDetailList,
-                Description = order.Detail,
+                Description = "Đã hoàn thành đơn hàng",
             };
 
             var newTransaction = new Transaction
