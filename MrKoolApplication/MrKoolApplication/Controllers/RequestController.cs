@@ -38,17 +38,28 @@ namespace MrKoolApplication.Controllers
 
 
         [HttpGet("{id}")]
-        public ActionResult<Request> GetRequestById(int id)
+        public ActionResult<RequestDTO> GetRequestById(int id)
         {
             var request = _requestRepository.GetById(id);
             if (request == null)
             {
                 return NotFound();
             }
-            return request;
+            var requestMap = _mapper.Map<RequestDTO>(request); 
+            return requestMap;
         }
 
-
+        [HttpGet("Request/Customer/{id}")]
+        public ActionResult<RequestDTO> GetRequestByCustomerID(int id)
+        {
+            var request = _requestRepository.GetByCustomerID(id);
+            if (request == null)
+            {
+                return NotFound();
+            }
+            var requestMap = _mapper.Map<RequestDTO>(request);
+            return requestMap;
+        }
         [HttpPost]
         public async Task<IActionResult> CreateRequest([FromBody] RequestDTO requestDto)
         {
@@ -86,7 +97,7 @@ namespace MrKoolApplication.Controllers
             {
                 return NotFound();
             }
-            request.Status = Enum.Status.Approved; 
+            request.Status = Enum.Status.Processing; 
            
             _context.SaveChanges();
             return NoContent();
@@ -104,7 +115,7 @@ namespace MrKoolApplication.Controllers
                 return NotFound();
             }
             request.TechnicianID = technicianID;
-
+            request.Status = Enum.Status.Approved;
             var order = new Order
             {
                 Date = request.Date,

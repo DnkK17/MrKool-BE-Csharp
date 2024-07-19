@@ -24,19 +24,21 @@ namespace MrKoolApplication.Repository
 
         public List<ConditionerModel> GetAll()
         {
-            return _context.Models.ToList();
+            return _context.Models.Where(a => a.Status ?? false).ToList();
+
         }
 
         public List<ConditionerModel> GetModels()
         {
-            return _context.Models.ToList();
+            return _context.Models.Where(a => a.Status ?? false).ToList();
         }
 
 
         public List<ConditionerModel> GetByNameContaining(string name)
         {
-            return _context.Models.Where(a => a.Title.Contains(name)).ToList();
+            return _context.Models.Where(a => a.Title.Contains(name) && (a.Status ?? false)).ToList();
         }
+
 
         //CRUD
         public bool ModelExist(int modelID)

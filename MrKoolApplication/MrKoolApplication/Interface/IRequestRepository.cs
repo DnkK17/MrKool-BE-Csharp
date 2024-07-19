@@ -9,6 +9,8 @@ namespace MrKoolApplication.Interface
         Task<IEnumerable<Request>> GetAllAsync();
         Task<Request> GetRequestByIdAsync(int id);
         Request GetById(int requestID);
+
+        Task <Request> GetByCustomerID(int customerID);
         Task<Request> CreateRequestAsync(Request request);
         bool UpdateRequest(Request request);    
         bool Save();

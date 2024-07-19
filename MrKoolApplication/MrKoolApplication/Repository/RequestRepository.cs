@@ -38,6 +38,14 @@ namespace MrKoolApplication.Repository
                 .FirstOrDefault(r => r.RequestID == requestID);
         }
 
+        public async Task<Request> GetByCustomerID(int customerID)
+        {
+            
+                return _context.Requests
+                    .Include(r => r.Services) // Include related entities if necessary
+                    .FirstOrDefault(r => r.CustomerID == customerID);
+            
+        }
         public async Task<Request> CreateRequestAsync(Request request)
         {
             if (request.Services != null)
