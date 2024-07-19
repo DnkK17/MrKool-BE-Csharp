@@ -23,7 +23,7 @@ builder.Services.AddCors(options =>
         builder.AllowAnyHeader()
                .AllowCredentials()
                .AllowAnyMethod()
-               .WithOrigins("https://cool-breeze-service.vercel.app", "https://localhost:7124", "http://127.0.0.1:5174", "https://localhost:7124/Area/Areas", "https://localhost:7124/Model", "http://127.0.0.1:5175");
+               .WithOrigins("http://localhost:5173","https://cool-breeze-service.vercel.app", "https://localhost:7124", "http://127.0.0.1:5174", "https://localhost:7124/Area/Areas", "https://localhost:7124/Model", "http://127.0.0.1:5175");
     });
 });
 
