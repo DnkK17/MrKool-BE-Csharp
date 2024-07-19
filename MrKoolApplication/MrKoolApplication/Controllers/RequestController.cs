@@ -49,10 +49,10 @@ namespace MrKoolApplication.Controllers
             return requestMap;
         }
 
-        [HttpGet("/Customer/{id}")]
-        public ActionResult<RequestDTO> GetRequestByCustomerID(int id)
+        [HttpGet("Request/customer/{custid}")]
+        public ActionResult<RequestDTO> GetRequestByCustomerID(int custid)
         {
-            var request = _requestRepository.GetByCustomerID(id);
+            var request = _requestRepository.GetByCustomerID(custid);
             if (request == null)
             {
                 return NotFound();
