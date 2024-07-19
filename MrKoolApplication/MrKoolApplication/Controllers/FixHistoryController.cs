@@ -5,6 +5,7 @@ using MrKool.Interface;
 using MrKool.Models;
 using MrKoolApplication.DTO;
 using MrKoolApplication.Interface;
+using MrKoolApplication.Repository;
 
 namespace MrKoolApplication.Controllers
 {
@@ -44,8 +45,19 @@ namespace MrKoolApplication.Controllers
             return Ok(FixHistoryDTO);
         }
 
-      
-     //CRUD
+        [HttpGet("/FixHistory/{cusID}/List")]
+        public IActionResult GetByCustomerID(int cusID)
+        {
+            var fixHistories = _fixRepository.GetByCustomerID(cusID);
+            if (fixHistories == null || !fixHistories.Any())
+            {
+                return NotFound("No fix history found for the given customer ID.");
+            }
+
+            var fixHistoryDtos = _mapper.Map<List<FixHistoryDTO>>(fixHistories);
+            return Ok(fixHistoryDtos);
+        }
+        //CRUD
 
         [HttpPost]
         [Route("CreateFixHistory")]

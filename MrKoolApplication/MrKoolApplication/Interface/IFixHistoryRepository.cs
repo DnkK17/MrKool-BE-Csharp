@@ -11,7 +11,6 @@ namespace MrKoolApplication.Interface
 
         List<FixHistory> GetFixHistories();
 
-
         bool FixHistoryExist(int FixHistoryID);
         bool UpdateFixHistory(FixHistory fixHistory);
 

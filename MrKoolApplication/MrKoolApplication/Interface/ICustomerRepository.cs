@@ -12,7 +12,7 @@ namespace MrKoolApplication.Interface
         List<Customer> GetByAreaId(int areaID);
 
         List<Customer> GetCustomers();
-      
+        Customer GetCustomerByEmail(string email);
 
         bool CustomerExist(int CustomerID);
         bool UpdateCustomer(Customer customer);

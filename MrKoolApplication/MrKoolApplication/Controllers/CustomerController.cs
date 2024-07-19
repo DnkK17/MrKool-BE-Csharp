@@ -37,10 +37,10 @@ namespace MrKool.Controllers
         }
 
         [HttpGet]
-        [Route("{id}")]
-        public async Task<ActionResult<CustomerDTO>> GetCustomerByIdAsync(int id)
+        [Route("/Customer/{customid}")]
+        public async Task<ActionResult<CustomerDTO>> GetCustomerByIdAsync(int customid)
         {
-            var customer = await _customerRepository.GetById(id);
+            var customer = await _customerRepository.GetById(customid);
             if (customer == null)
             {
                 return NotFound();
@@ -48,6 +48,19 @@ namespace MrKool.Controllers
 
             var customerDTO = _mapper.Map<CustomerDTO>(customer);
             return Ok(customerDTO);
+        }
+
+        [HttpGet("Customer/{email}")]
+        public IActionResult GetCustomerByEmail(string email)
+        {
+            var customer = _customerRepository.GetCustomerByEmail(email);
+            if (customer == null)
+            {
+                return NotFound();
+            }
+
+            var customerDto = _mapper.Map<CustomerDTO>(customer);
+            return Ok(customerDto);
         }
 
         [HttpGet]

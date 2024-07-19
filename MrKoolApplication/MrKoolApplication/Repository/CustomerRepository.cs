@@ -38,7 +38,10 @@ namespace MrKool.Repository
             return _context.Customers.ToList();
         }
 
-
+        public Customer GetCustomerByEmail(string email)
+        {
+            return _context.Customers.FirstOrDefault(c => c.Email == email);
+        }
         public List<Customer> GetByNameContaining(string CustomerName)
         {
             return _context.Customers
