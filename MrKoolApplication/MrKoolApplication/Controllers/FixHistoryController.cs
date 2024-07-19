@@ -51,7 +51,7 @@ namespace MrKoolApplication.Controllers
             var fixHistories = _fixRepository.GetByCustomerID(cusID);
             if (fixHistories == null || !fixHistories.Any())
             {
-                return NotFound("No fix history found for the given customer ID.");
+                return NotFound("No fix history found for the given customer ID");
             }
 
             var fixHistoryDtos = _mapper.Map<List<FixHistoryDTO>>(fixHistories);
