@@ -4,6 +4,7 @@ namespace MrKoolApplication.DTO
 {
     public class RequestDTO
     {
+        public int RequestID { get; set; }
         public string? Date { get; set; }
         public string? Description { get; set; }
         public string? RequestAddress { get; set; }
