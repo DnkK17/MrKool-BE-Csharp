@@ -18,15 +18,15 @@ var _config = builder.Configuration;
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("GoodPolicy", policyBuilder =>
+    options.AddPolicy("CorsPolicy", builder =>
     {
-        policyBuilder
-            .SetIsOriginAllowed(origin => true) // Allow any origin
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowCredentials(); // Allow credentials (cookies)
+        builder.AllowAnyHeader()
+               .AllowCredentials()
+               .AllowAnyMethod()
+               .WithOrigins("https://cool-breeze-service.vercel.app", "https://localhost:7124", "http://127.0.0.1:5174", "https://localhost:7124/Area/Areas", "https://localhost:7124/Model", "http://127.0.0.1:5175");
     });
 });
+
 // Add services to the container.
 builder.Services.AddControllers()
            .AddJsonOptions(options =>
@@ -82,7 +82,7 @@ builder.Services.AddDbContext<DBContext>(options =>
 
 builder.Services.AddTransient<VnPayPayment>();
 var app = builder.Build();
-app.UseCors();
+app.UseCors("CorsPolicy");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
